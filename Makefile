@@ -6,22 +6,22 @@
 #    By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/14 17:02:35 by msintas-          #+#    #+#              #
-#    Updated: 2023/04/14 17:07:43 by msintas-         ###   ########.fr        #
+#    Updated: 2023/05/31 17:06:49 by msintas-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	philo
 
-SRCS	=	philo.c
+SRCS	=	main.c philo.c utils.c time.c
 
 #BONUS	=	xxx_bonus.c
 
 CC		=	gcc
 
-CFLAGS	=   -Wextra -Wall -Werror 
+#CFLAGS	=   -Wextra -Wall -Werror -pthread
+CFLAGS	=   -pthread
 
 RM		=	rm -rf
-
 
 OBJS	=	$(SRCS:.c=.o)
 
@@ -41,9 +41,7 @@ fclean:
 re:			fclean all
 
 #bonus:		$(BOBJS)
-#			@make -C $(MLX42)
-#			@make -C $(LIBFT) --silent
-#			$(CC) $(CFLAGS) $(BOBJS) $(INCLUDES) $(LIBS) -o $(NAME)
+#			$(CC) $(CFLAGS) $(BOBJS) -o $(NAME)
 
 run : all
 	./$(NAME)
