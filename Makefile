@@ -6,13 +6,13 @@
 #    By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/14 17:02:35 by msintas-          #+#    #+#              #
-#    Updated: 2023/05/31 17:06:49 by msintas-         ###   ########.fr        #
+#    Updated: 2023/06/01 11:27:23 by msintas-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	philo
 
-SRCS	=	main.c philo.c utils.c time.c
+SRCS	=	main.c philo.c utils.c work.c
 
 #BONUS	=	xxx_bonus.c
 

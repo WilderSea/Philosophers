@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:22 by msintas-          #+#    #+#             */
-/*   Updated: 2023/05/31 17:34:56 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/05 10:27:30 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,7 @@
 
 */
 
-/*void *ft_action()
-{
-    printf("Test: This philosopher is eating\n");
-    usleep(800000);
-    printf("Test: now this philosopher is sleeping.\n");
-    usleep(800000);
-    printf("Test: now this philosopher is thinking.\n");
-    usleep(800000);
-    printf("Test: This philosopher is eating again\n");
-    usleep(800000);
-    return (NULL);
-}*/
+
 
 void	ft_print_usage(void)
 {
@@ -81,7 +70,6 @@ void ft_init_philos(t_data *data)
         data->philosophers[i].fork_right = (i + 1) % data->num_of_philos;
         data->philosophers[i].generic_data = data; 
         // muy importante. Aqui le digo que mi puntero de generic data, se llena con la info del struct data
-        // printf("y mis tenedores son: izq = %d y der = %d\n", data->philosophers[i].fork_left, data->philosophers[i].fork_right);
         i++;
     }
 }
@@ -97,7 +85,7 @@ void ft_init_data(int argc, char **argus, t_data *data)
     data->philosophers = malloc(sizeof(t_philo) * data->num_of_philos);
     data->mutexes = malloc(sizeof(pthread_mutex_t) * (data->num_of_philos + 1));
     // falta proteger los mallocs
-    data->time_to_die = ft_long_atoi(argus[1]);
+    data->time_to_die = ft_long_atoi(argus[1]); // tiempo limite
     //printf("time_to_die: %ld\n", data->time_to_die);
     data->time_to_eat = ft_long_atoi(argus[2]);
     //printf("time_to_eat: %ld\n", data->time_to_eat);
@@ -108,15 +96,13 @@ void ft_init_data(int argc, char **argus, t_data *data)
         data->num_must_eat = ft_long_atoi(argus[4]);
         //printf("must eat n of times: %d\n", data->num_must_eat);
     }
-    gettimeofday(&data->start_time, NULL); // Capture the start time
-    printf("Seconds: %ld\n", data->start_time.tv_sec);
-    printf("Microseconds: %d\n", data->start_time.tv_usec);
+    data->some_philo_ko = 0;
+    gettimeofday(&data->start_time, NULL);
 }
 
 int main(int argc, char **argv)
 {
-    /* un struct sin puntero es un struct que existe solo una vez 
-    y se pasa por referencia a todo el programa */
+    
     t_data  data;
     
     ft_check_args(argc, &argv[1], &data); // TO DO **
@@ -124,28 +110,11 @@ int main(int argc, char **argv)
     ft_init_data(argc, &argv[1], &data);
 
     ft_init_philos(&data);
+
+    ft_supervisor();
     
     ft_create_philos(&data);
     
     return (0);
 }
-
-/*
- how to change from one state (eating, sleeping...) to another state?
- mediante el uso del tiempo:  usleep?
- 
- how to control time in the program?
-*/
-
-
-/*
-
-cada hilo genera una tarea
-esas tareas son comer, dormir o pensar
-para que una tarea pueda ejecutarse depende de los estados de los otros hilos
-pero los hilos no se miran entre ellos!!!
-controlar que un hilo pueda ejecutar o no la tarea mediante mutex
-las tareas dejan de ejecutarse cuando se cumple el tiempo que se ha establecido
-
-*/
 

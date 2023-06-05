@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/05/30 13:40:19 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/02 13:47:25 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,16 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <sys/time.h>
+
+#define COLOR_RED     "\x1b[31m"
+#define COLOR_GREEN   "\x1b[32m"
+#define COLOR_YELLOW  "\x1b[33m"
+#define COLOR_BLUE    "\x1b[34m"
+#define COLOR_MAGENTA "\x1b[35m"
+#define COLOR_CYAN    "\x1b[36m"
+#define COLOR_RESET   "\x1b[0m"
+
+
 
 /* hace falta una variable que cuente el tiempo desde el principio */
     
@@ -60,10 +70,10 @@ typedef struct s_philo
 
     struct s_data *generic_data; // accediendo al struct data
    
-   //long int timestamp_in_ms;
-    // temporal, no se como usarlo todavia
-    //long int current_time;
-    //long int time_spent_eating;
+    long int timestamp_in_ms;
+    long int last_ate; // timestamp de la ultima vez que empezo a comer
+    
+    
     
 }   t_philo;
 
@@ -88,6 +98,9 @@ typedef struct s_data
     long int time_to_sleep;
     int num_must_eat; // optional
     
+    int some_philo_ko;
+    
+    
 }   t_data;
 
 
@@ -95,6 +108,9 @@ int         ft_atoi(const char *str);
 int         ft_create_philos(t_data *data);
 void	    ft_putstr_fd(char *s, int fd);
 long int	ft_long_atoi(const char *str);
+
+/* time functions */
+long int ft_capture_timestamp(struct timeval current, struct timeval start);
 
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/05/31 16:03:47 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/02 13:52:25 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,24 +53,62 @@ y quien empieza pensando (impares)
 */
 
 
+
+void ft_usleep_philo(t_philo *philo, long int timeto)
+{
+    long int final_time;
+    long int now;
+
+    gettimeofday(&philo->generic_data->current_time, NULL); // Get the current time
+    now = ft_capture_timestamp(philo->generic_data->current_time, philo->generic_data->start_time);
+    final_time = now + timeto;
+    while(final_time > now)
+    {
+        gettimeofday(&philo->generic_data->current_time, NULL); // Get the current time
+        now = ft_capture_timestamp(philo->generic_data->current_time, philo->generic_data->start_time);
+        //if(philo->generic_data->some_philo_ko == 1)
+        //    break;
+        usleep(240);
+    }
+}
+
+
 void ft_philo_thinks(t_philo *philo)
 {
-    //printf("philo num %d is thinking\n ", philo_num);
+    printf(COLOR_MAGENTA "%ld philo num %d is thinking" COLOR_RESET "\n ", philo->timestamp_in_ms, philo->philo_num);
 }
+
 
 void ft_philo_sleeps(t_philo *philo)
 {
-    printf("timestamp philo %d starts to sleep\n", philo->philo_num);
+    printf(COLOR_RED "%ld philo %d starts to sleep" COLOR_RESET "\n", philo->timestamp_in_ms, philo->philo_num);
     usleep(philo->generic_data->time_to_sleep * 1000); // para que sean microsegundos
 }
+
 
 // function to execute for a period of time [time_to_eat]
 void ft_philo_eats(t_philo *philo)
 {
-    printf("timestamp philo %d is eating\n", philo->philo_num);
-    // mientras que [time_to_eat] no se agote, el filosofo come
-    usleep(philo->generic_data->time_to_eat * 1000); // para que sean microsegundos
-    // timestamp_in_ms X is eating
+    // Lock the corresponding mutex
+    // cuando van a comer, tienen que bloquear los dos mutex que le corresponden 
+    pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_left]));
+    pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_right]));
+        
+    // Print cuando cogen los tenedores
+    printf("%ld philo %d has taking left fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_left);
+    printf("%ld philo %d has taking right fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_right);
+    
+    // coger la ultima vez que el philosofo comió
+    gettimeofday(&philo->generic_data->current_time, NULL); // Get the current time
+    philo->last_ate = ft_capture_timestamp(philo->generic_data->current_time, philo->generic_data->start_time);
+    printf(COLOR_GREEN "%ld philo %d is eating" COLOR_RESET "\n", philo->last_ate, philo->philo_num);
+    
+    //usleep(philo->generic_data->time_to_eat * 1000); // para que sean microsegundos
+    ft_usleep_philo(philo, philo->generic_data->time_to_eat);
+        
+    // Release the lock
+    pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
+    pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_right]);
 }
 
 /*
@@ -87,41 +125,33 @@ void *ft_action(void *each_philo)
     
     philo->tid = pthread_self(); // Para coger el id del thread
     
-    //printf("filosofo/thread num: %d with id: %lu is starting and my forks are %d and %d\n", philo->philo_num, (unsigned long)philo->tid, philo->fork_left, philo->fork_right);
+    //printf("filosofo/thread id: %lu is starting\n", (unsigned long)philo->tid);
    
     /* aqui los filosofos tienen que comer, dormir y pensar para siempre */
-    /*while(true)
+    // mientras que ningun philo este ko, seguir con la simulacion
+    
+    while(1)
     {
+        ft_philo_eats(philo);
+        ft_philo_sleeps(philo);
+        if (/* philo ko, fin simulacion. esto lo comprueba el hilo supervisor */)
+            return;
+        ft_philo_thinks(philo);
         
-    }*/
+    }
+        // para los prints y las variables que se modifican (last_ate, philo_ko)
+        // hay que hacer mutexes para evitar data racings 
+        printf("Philosofo/Thread num: %d is exiting...\n", philo->philo_num);
+        pthread_exit(NULL);
     
-    // Lock the corresponding mutex
-    // aqui el philosofo tiene que bloquear los dos mutex que le corresponden
-    
-    pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_left]));
-    pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_right]));
-    
-    // Critical section: Access the shared resource
-    gettimeofday(&philo->generic_data->current_time, NULL); // Get the current time
-    //ft_elapsed_time()
-    printf("%ld philo %d has taking left fork %d\n", philo->generic_data->current_time.tv_sec * 1000, philo->philo_num, philo->fork_left);
-    printf("%ld philo %d has taking right fork %d\n", philo->generic_data->current_time.tv_sec, philo->philo_num, philo->fork_right);
-    ft_philo_eats(philo);
-    
-    // Release the lock
-    pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
-    pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_right]);
-    printf("timestamp philo %d leaves the left fork %d\n", philo->philo_num, philo->fork_left);
-    printf("timestamp philo %d leaves right fork %d\n", philo->philo_num, philo->fork_right);
-        
-    ft_philo_sleeps(philo);
-    
-    printf("Philosofo/Thread num: %d is exiting...\n", philo->philo_num);
-    
-    pthread_exit(NULL);
     
 }
 
+// EN LA RUTINA DEL HILO AUXILIAR
+// if(current_time > data->philo[i].last_ate + data->time_to_die)
+//      ^
+//      |
+//     (now) ? long int basicamanete
 
 int ft_create_philos(t_data *data)
 {
@@ -141,7 +171,6 @@ int ft_create_philos(t_data *data)
     i = 0; // este se queda 0 porque es el indice del array
     while(i < data->num_of_philos)
     {
-        printf("philo num: %d\n", data->philosophers[i].philo_num);
         result = pthread_create(&data->philosophers[i].tid, NULL, &ft_action, &data->philosophers[i]);
         if (result != 0) // on success, pthread_create returns 0
         {
