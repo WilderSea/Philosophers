@@ -6,117 +6,61 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/02 13:52:25 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/05 14:30:33 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/* pseudocodigo para un filosofo cuando quiere comer */
-/* con semaforos -- BONUS */
-/*
-    philosopher i
-    
-    do
-    {
-        wait(chopstick[i]);
-        wait(chopstick[i + 1] % num_of_forks)
-        ...
-        // eat
-        signal(chopstick[i]);
-        signal(chopstick[i + 1] % num_of_forks)
-        // think
-    }
-    
-
-*/
-
-/*
-
-1º--> saber como se utiliza gettimeofday() function
-2º--> para que se usa usleep()
-3º--> pensar como calcular el tiempo que tienen que estar ejecutando
-cada accion cada filosofo. como mido el tiempo que comen, 
-para que dejen de comer y duerman, etc
-xº --> mirar esto: 
-https://stackoverflow.com/questions/52106452/have-a-function-run-for-a-specific-amount-of-time-in-c
-
-*/
-
-
-/* 
-all threads will start executing this function.
-it means all philosophers want to eat when the program starts
-pero no se puede porque tiene que haber tenedores libres
-asi que hay que separar quien empieza comiendo (pares)
-y quien empieza pensando (impares)
-*/
-
-
-
-void ft_usleep_philo(t_philo *philo, long int timeto)
-{
-    long int final_time;
-    long int now;
-
-    gettimeofday(&philo->generic_data->current_time, NULL); // Get the current time
-    now = ft_capture_timestamp(philo->generic_data->current_time, philo->generic_data->start_time);
-    final_time = now + timeto;
-    while(final_time > now)
-    {
-        gettimeofday(&philo->generic_data->current_time, NULL); // Get the current time
-        now = ft_capture_timestamp(philo->generic_data->current_time, philo->generic_data->start_time);
-        //if(philo->generic_data->some_philo_ko == 1)
-        //    break;
-        usleep(240);
-    }
-}
-
 
 void ft_philo_thinks(t_philo *philo)
 {
+    // Get timestamp when philo starts to sleep
+    ft_right_now(philo);
     printf(COLOR_MAGENTA "%ld philo num %d is thinking" COLOR_RESET "\n ", philo->timestamp_in_ms, philo->philo_num);
 }
 
 
 void ft_philo_sleeps(t_philo *philo)
 {
+    // Get timestamp when philo starts to sleep
+    ft_right_now(philo);
     printf(COLOR_RED "%ld philo %d starts to sleep" COLOR_RESET "\n", philo->timestamp_in_ms, philo->philo_num);
     usleep(philo->generic_data->time_to_sleep * 1000); // para que sean microsegundos
+    //comprubar si ha muerto
 }
 
 
-// function to execute for a period of time [time_to_eat]
 void ft_philo_eats(t_philo *philo)
 {
     // Lock the corresponding mutex
     // cuando van a comer, tienen que bloquear los dos mutex que le corresponden 
     pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_left]));
+    //comprubar si ha muerto
     pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_right]));
-        
+    //comprubar si ha muerto
+    // Get timestamp
+    ft_right_now(philo);
+    //gettimeofday(&philo->current_time, NULL);
+    //philo->timestamp_in_ms = ft_capture_timestamp(philo->current_time, philo->start_time);
     // Print cuando cogen los tenedores
     printf("%ld philo %d has taking left fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_left);
     printf("%ld philo %d has taking right fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_right);
     
-    // coger la ultima vez que el philosofo comió
-    gettimeofday(&philo->generic_data->current_time, NULL); // Get the current time
-    philo->last_ate = ft_capture_timestamp(philo->generic_data->current_time, philo->generic_data->start_time);
     printf(COLOR_GREEN "%ld philo %d is eating" COLOR_RESET "\n", philo->last_ate, philo->philo_num);
     
-    //usleep(philo->generic_data->time_to_eat * 1000); // para que sean microsegundos
-    ft_usleep_philo(philo, philo->generic_data->time_to_eat);
-        
+    // ft_usleep_philo(philo); // hacer esta funcion para tunear el "usleep" xq no es exacto
+    usleep(philo->generic_data->time_to_eat * 1000); // para que sean microsegundos
+    //comprubar si ha muerto
+    // Get the current time cuando filosofo termino de comer por ultima vez
+    gettimeofday(&philo->current_time, NULL); 
+    philo->last_ate = ft_capture_timestamp(philo->current_time, philo->start_time);
     // Release the lock
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_right]);
 }
 
-/*
 
-aqui los filosofos entran en accion. 
-tienen que comer antes de que se agote el tiempo
-
-*/
 void *ft_action(void *each_philo)
 {
     t_philo *philo;
@@ -129,20 +73,21 @@ void *ft_action(void *each_philo)
    
     /* aqui los filosofos tienen que comer, dormir y pensar para siempre */
     // mientras que ningun philo este ko, seguir con la simulacion
-    
+    gettimeofday(&philo->start_time, NULL);
     while(1)
     {
         ft_philo_eats(philo);
         ft_philo_sleeps(philo);
-        if (/* philo ko, fin simulacion. esto lo comprueba el hilo supervisor */)
-            return;
+       // if (/* philo ko, fin simulacion. esto lo comprueba el hilo supervisor */)
+       //     return;
         ft_philo_thinks(philo);
         
     }
         // para los prints y las variables que se modifican (last_ate, philo_ko)
         // hay que hacer mutexes para evitar data racings 
         printf("Philosofo/Thread num: %d is exiting...\n", philo->philo_num);
-        pthread_exit(NULL);
+        //pthread_exit(NULL); 
+        return (NULL);
     
     
 }
@@ -163,7 +108,6 @@ int ft_create_philos(t_data *data)
     while(i < data->num_of_philos)
     {
         pthread_mutex_init(&data->mutexes[i], NULL);
-        printf("mutex number: %d is initialized\n", i);
         i++;   
     }
 

@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/02 13:47:25 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/05 14:29:00 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,12 @@ typedef struct s_philo
    
     long int timestamp_in_ms;
     long int last_ate; // timestamp de la ultima vez que empezo a comer
+
+    // los timestamp deben ser especificos de cada philo
+    struct timeval start_time;
+    struct timeval current_time;
     
+    int philo_ko; // 0 vivo, 1 muerto
     
     
 }   t_philo;
@@ -89,8 +94,8 @@ typedef struct s_data
     
     pthread_mutex_t *mutexes; // array de mutexes
     
-    struct timeval start_time; // accedo al struct de time.h que permite coger timestamp 
-    struct timeval current_time; // accedo al struct de time.h que permite coger timestamp 
+    //struct timeval start_time; // accedo al struct de time.h que permite coger timestamp 
+    //struct timeval current_time; // accedo al struct de time.h que permite coger timestamp 
     
     /* time limits */
     long int time_to_die;
@@ -98,19 +103,24 @@ typedef struct s_data
     long int time_to_sleep;
     int num_must_eat; // optional
     
-    int some_philo_ko;
+    // int some_philo_ko;
     
     
 }   t_data;
 
-
+/* utils */
 int         ft_atoi(const char *str);
-int         ft_create_philos(t_data *data);
 void	    ft_putstr_fd(char *s, int fd);
 long int	ft_long_atoi(const char *str);
 
+/*  */
+void ft_init_data(int argc, char **argus, t_data *data);
+void ft_init_philos(t_data *data);
+int         ft_create_philos(t_data *data);
+
 /* time functions */
 long int ft_capture_timestamp(struct timeval current, struct timeval start);
-
+void ft_right_now(t_philo *philo);
+//void ft_usleep_philo(t_philo *philo);
 
 #endif
