@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/05 14:29:00 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/06 10:05:26 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,13 @@ typedef struct s_philo
     struct s_data *generic_data; // accediendo al struct data
    
     long int timestamp_in_ms;
-    long int last_ate; // timestamp de la ultima vez que empezo a comer
+    struct timeval last_ate; // timestamp de la ultima vez que empezo a comer
 
     // los timestamp deben ser especificos de cada philo
     struct timeval start_time;
     struct timeval current_time;
     
-    int philo_ko; // 0 vivo, 1 muerto
+    //int philo_ko; // 0 vivo, 1 muerto
     
     
 }   t_philo;
@@ -91,6 +91,8 @@ typedef struct s_data
     int num_of_forks; // num of mutexes
     
     t_philo *philosophers; // array de filosofos
+
+    pthread_t *thread_ids;
     
     pthread_mutex_t *mutexes; // array de mutexes
     
@@ -103,7 +105,7 @@ typedef struct s_data
     long int time_to_sleep;
     int num_must_eat; // optional
     
-    // int some_philo_ko;
+    int some_philo_ko;
     
     
 }   t_data;
@@ -117,6 +119,7 @@ long int	ft_long_atoi(const char *str);
 void ft_init_data(int argc, char **argus, t_data *data);
 void ft_init_philos(t_data *data);
 int         ft_create_philos(t_data *data);
+int ft_checker(t_philo *philo);
 
 /* time functions */
 long int ft_capture_timestamp(struct timeval current, struct timeval start);

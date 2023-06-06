@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/05 14:10:39 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/06 10:06:02 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void ft_init_data(int argc, char **argus, t_data *data)
     data->philosophers = malloc(sizeof(t_philo) * data->num_of_philos);
     if (data->philosophers == NULL)
         return ;
+    data->thread_ids = malloc(sizeof(pthread_t) * data->num_of_philos);
     data->mutexes = malloc(sizeof(pthread_mutex_t) * (data->num_of_philos + 1));
     if (data->mutexes == NULL)
         return ;
@@ -63,4 +64,5 @@ void ft_init_data(int argc, char **argus, t_data *data)
      || data->time_to_sleep < 0) {
         return ;
      }
+    data->some_philo_ko = 0;
 }

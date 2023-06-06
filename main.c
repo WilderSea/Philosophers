@@ -6,28 +6,11 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:22 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/05 14:09:12 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/06 08:56:36 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "philo.h"
-
-/*
-    primer objetivo
-    que la funcion que el hilo quiera ejecutar
-    sea capaz de cambiar de estado (eat, sleep or think)
-    por tiempo
-    una vez tenga eso, hacer mas hilos y coordinar/sincronizar
-    que se ejecuten las tareas con los cambios de estado acorde a cuando 
-    deban ejecutarse
-    
-    despues miro lo de los tenedores (mutex)
-
-
-*/
-
-
 
 void	ft_print_usage(void)
 {
@@ -54,9 +37,6 @@ void ft_check_args(int argc, char **argus, t_data *data)
     }
 }
 
-
-
-
 /*
 
     bucle que compruebe la diferncai entre la ultima vez que comio y ahora.
@@ -65,11 +45,24 @@ void ft_check_args(int argc, char **argus, t_data *data)
 
 */
 
-/*int ft_checker(data)
+/*int ft_checker(t_data *data)
 {
-    
-    
+    int i;
+
+    i = 0;
+    while (i < data->num_of_philos)
+    {
+        printf("cuando imprime esto? philo num: %d\n", data->philosophers[i].philo_num);
+        i++;
+    }
+    return(0);
 }*/
+
+int ft_checker(t_philo *philo)
+{
+    printf("cuando imprime esto?\n");
+    return (0);
+}
 
 int main(int argc, char **argv)
 {
@@ -84,9 +77,9 @@ int main(int argc, char **argv)
 
     ft_create_philos(&data);
     
-    printf("cuando imprime esto");
-    
-    //ft_checker(&data);
+    // checker
+
+    // joins
 
     return (0);
 }
