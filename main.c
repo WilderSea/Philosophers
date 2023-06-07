@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:22 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/06 08:56:36 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/07 16:05:33 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,24 +45,6 @@ void ft_check_args(int argc, char **argus, t_data *data)
 
 */
 
-/*int ft_checker(t_data *data)
-{
-    int i;
-
-    i = 0;
-    while (i < data->num_of_philos)
-    {
-        printf("cuando imprime esto? philo num: %d\n", data->philosophers[i].philo_num);
-        i++;
-    }
-    return(0);
-}*/
-
-int ft_checker(t_philo *philo)
-{
-    printf("cuando imprime esto?\n");
-    return (0);
-}
 
 int main(int argc, char **argv)
 {
@@ -71,11 +53,17 @@ int main(int argc, char **argv)
     
     ft_check_args(argc, &argv[1], &data); // TO DO **
 
-    ft_init_data(argc, &argv[1], &data);
+    ft_init_data(argc, &argv[1], &data); // init generic data
 
-    ft_init_philos(&data);
+    ft_init_philos(&data); // init data para cada philosofo
 
-    ft_create_philos(&data);
+    ft_init_mutexes(&data); // init all mutexes
+
+    ft_create_philos(&data); // create threads
+
+    ft_destroy_mutexes(&data);
+
+    printf("All threads have completed\n");
     
     // checker
 

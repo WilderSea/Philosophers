@@ -6,11 +6,12 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/06 12:48:34 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/07 16:12:44 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
 
 
 void ft_philo_thinks(t_philo *philo)
@@ -21,45 +22,50 @@ void ft_philo_thinks(t_philo *philo)
 }
 
 
-void ft_philo_sleeps(t_philo *philo)
+int ft_philo_sleeps(t_philo *philo)
 {
     // Get timestamp when philo starts to sleep
     ft_right_now(philo);
     printf(COLOR_RED "%ld philo %d starts to sleep" COLOR_RESET "\n", philo->timestamp_in_ms, philo->philo_num);
-    usleep(philo->generic_data->time_to_sleep * 1000); // para que sean microsegundos
+    usleep(philo->generic_data->time_to_sleep * 1000); // para que sean microsegundos, tiempo de dormir
     //comprubar si ha muerto
+    if (ft_philo_ko(philo) == 1)
+        return (1);
+    return (0);
 }
 
 
-void ft_philo_eats(t_philo *philo)
+int ft_philo_eats(t_philo *philo)
 {
-    // Lock the corresponding mutex
-    // cuando van a comer, tienen que bloquear los dos mutex que le corresponden 
     pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_left]));
-    //comprubar si ha muerto
+
+    if (ft_philo_ko(philo) == 1)
+        return (1);
     pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_right]));
-    //comprubar si ha muerto
-    // Get timestamp
-    
-    //gettimeofday(&philo->current_time, NULL);
-    //philo->timestamp_in_ms = ft_capture_timestamp(philo->current_time, philo->start_time);
-    // Print cuando cogen los tenedores
+    if (ft_philo_ko(philo) == 1)
+        return (1);
     printf("%ld philo %d has taking left fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_left);
     printf("%ld philo %d has taking right fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_right);
-    gettimeofday(&philo->current_time, NULL);
-    printf(COLOR_GREEN "%ld philo %d is eating" COLOR_RESET "\n", ft_capture_timestamp(philo->current_time, philo->start_time), philo->philo_num);
+    ft_right_now(philo);
+    printf(COLOR_GREEN "%ld philo %d is eating" COLOR_RESET "\n", philo->timestamp_in_ms, philo->philo_num);
     
     // ft_usleep_philo(philo); // hacer esta funcion para tunear el "usleep" xq no es exacto
-    usleep(philo->generic_data->time_to_eat * 1000); // para que sean microsegundos
-    //comprubar si ha muerto
+    usleep(philo->generic_data->time_to_eat * 1000); // para que sean microsegundos, tiempo que pasa comiendo
     // Get the current time cuando filosofo termino de comer por ultima vez
+    pthread_mutex_lock(&(philo->current_time_mutex));
     gettimeofday(&philo->current_time, NULL); 
+    pthread_mutex_lock(&(philo->last_ate_mutex));
     philo->last_ate = philo->current_time;
+    pthread_mutex_unlock(&(philo->current_time_mutex));
+    pthread_mutex_unlock(&(philo->last_ate_mutex));
+
+    if (ft_philo_ko(philo) == 1)
+        return (1);
     // Release the lock
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_right]);
+    return (0);
 }
-
 
 void *ft_action(void *each_philo)
 {
@@ -67,54 +73,53 @@ void *ft_action(void *each_philo)
     
     philo = (t_philo *)each_philo; // castear el nuevo struct
     
-    //philo->tid = pthread_self(); // Para coger el id del thread
+    philo->tid = pthread_self(); // Para coger el id del thread
     
     //printf("filosofo/thread id: %lu is starting\n", (unsigned long)philo->tid);
 
     // aqui comprobar filosofos pares o impares. y hacerle un retraso al empezar
-    //
    
     /* aqui los filosofos tienen que comer, dormir y pensar para siempre */
     // mientras que ningun philo este ko, seguir con la simulacion
-    gettimeofday(&philo->start_time, NULL);
     while(1)
     {
-        ft_philo_eats(philo);
-        ft_philo_sleeps(philo);
-       // if (/* philo ko, fin simulacion. esto lo comprueba el hilo supervisor */)
-       //     return;
-        ft_philo_thinks(philo);
-        
+        //printf("philo ko or not: %d\n", philo->philo_ko);
+        if (ft_philo_eats(philo) == 1)
+        {
+            return (NULL);
+        }
+        if (ft_philo_sleeps(philo) == 1) 
+        {
+            return (NULL);
+        }
+            /* if not .....return (NULL); */
+        ft_philo_thinks(philo);   
     }
         // para los prints y las variables que se modifican (last_ate, philo_ko)
         // hay que hacer mutexes para evitar data racings 
         printf("Philosofo/Thread num: %d is exiting...\n", philo->philo_num);
- 
+
         return (NULL);
-    
-    
 }
 
 
 int ft_create_philos(t_data *data)
 {
     int i;
-    int result;
-   
-    // Initialize mutexes
-    i = 0;
-    while(i < data->num_of_philos)
-    {
-        pthread_mutex_init(&data->mutexes[i], NULL);
-        i++;   
-    }
+    int result;   
 
     // Create threads
     i = 0; // este se queda 0 porque es el indice del array
     while(i < data->num_of_philos)
     {
         // comprobar pares o impares e iniciar unos despues que otros
-        result = pthread_create(&data->thread_ids[i], NULL, &ft_action, &data->philosophers[i]);
+        if (data->philosophers[i].philo_num % 2 != 0)
+        {
+            usleep(40);
+        }
+        gettimeofday(&data->philosophers[i].start_time, NULL); // necesita un mutex??
+        data->philosophers[i].last_ate = data->philosophers[i].start_time;
+        result = pthread_create(&data->philosophers[i].tid, NULL, &ft_action, &data->philosophers[i]);
         if (result != 0) // on success, pthread_create returns 0
         {
             ft_putstr_fd("Failed to create thread.\n", 2);
@@ -123,64 +128,45 @@ int ft_create_philos(t_data *data)
         i++;   
     }
 
-   /* main thread continues executing the code that follows the pthread_create 
+    /* main thread continues executing the code that follows the pthread_create 
     call without waiting for the newly created threads to finish its execution */
-    usleep(100); // retrasar un poco la ejecución de este while
-    // esto es un bucle infinito para acceder al struct de cada filo ( y no ha cada hilo ) para comprobar valor de sus variables
-    while (!data->some_philo_ko)
+    
+    /* Bucle infinito para acceder al struct de cada filo ( y no ha cada thread ) 
+    para comprobar el valor de la variable que dice si está ko */
+    
+    while(1)
     {
-        i = 0;
-        while(i < data->num_of_philos) 
+        usleep(100); // retrasar un poco la ejecución de este while
+        // 1º check if philosophers ate specific number of times
+
+        // 2º check if any philosopher died
+        
+        if (ft_checker(data) == 1)
         {
-            // 1º check time left to decide if a philosopher is ko
-            // mutex de current_time xq lo estoy modificando
-            printf("ahora: %ld\n", ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].start_time));
-            gettimeofday(&data->philosophers[i].current_time, NULL); // actualizo current_time
-            if (ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].last_ate) >= data->time_to_die)
-            {
-                printf("%ld philo has died %i\n", ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].last_ate), i + 1);
-                data->some_philo_ko = 1;
-                ft_join_threads(data);
-                break;
-            }
-            else
-            {
-                i++;
-            }
+            printf("hay un ko\n");
+            // terminar programa
+            return (0);
         }
         
-        // aqui va lo del numero de comidas
-        //i = 0;
-        
     }
-   
-    printf("inicia join\n");
     
     // Wait for the threads to finish
+    // LOS JOIN deberian estar dentro de otro bucle??
     i = 0;
     while(i < data->num_of_philos)
     {
-        result = pthread_join(data->thread_ids[i], NULL);
+        printf("dentro\n");
+        result = pthread_join(data->philosophers[i].tid, NULL);
         if (result != 0) // on success, pthread_join returns 0
         {
             ft_putstr_fd("Failed to join the thread.\n", 2);
             exit (1);
         }
         i++;
-    }
+    }  
 
-    printf("inicia destroy\n");
-     
-    // Destroy mutexes
-    i = 0;
-    while(i < data->num_of_philos)
-    {
-        pthread_mutex_destroy(&data->mutexes[i]);
-        printf("mutex number: %d is destroyed\n", i);
-        i++;
-    }
     
-    printf("All threads have completed\n");
+    
     
     return (0);
 }

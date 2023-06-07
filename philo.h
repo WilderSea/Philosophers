@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/06 10:05:26 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/07 16:08:38 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,11 @@ typedef struct s_philo
     struct timeval start_time;
     struct timeval current_time;
     
-    //int philo_ko; // 0 vivo, 1 muerto
+    int philo_ko; // 0 vivo, 1 muerto
     
+    pthread_mutex_t last_ate_mutex;
+    pthread_mutex_t current_time_mutex;
+    pthread_mutex_t philo_ko_mutex;
     
 }   t_philo;
 
@@ -92,10 +95,10 @@ typedef struct s_data
     
     t_philo *philosophers; // array de filosofos
 
-    pthread_t *thread_ids;
+    //pthread_t *thread_ids;
     
     pthread_mutex_t *mutexes; // array de mutexes
-    
+
     //struct timeval start_time; // accedo al struct de time.h que permite coger timestamp 
     //struct timeval current_time; // accedo al struct de time.h que permite coger timestamp 
     
@@ -119,11 +122,15 @@ long int	ft_long_atoi(const char *str);
 void ft_init_data(int argc, char **argus, t_data *data);
 void ft_init_philos(t_data *data);
 int         ft_create_philos(t_data *data);
-int ft_checker(t_philo *philo);
+
 
 /* time functions */
 long int ft_capture_timestamp(struct timeval current, struct timeval start);
 void ft_right_now(t_philo *philo);
 //void ft_usleep_philo(t_philo *philo);
+int ft_checker(t_data *data); // comprueba si ha muerto y lo marca con una variable
+int ft_philo_ko(t_philo *philo);
+void ft_destroy_mutexes(t_data *data);
+void ft_init_mutexes(t_data *data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/06 10:06:02 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/07 16:05:15 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void ft_init_philos(t_data *data)
         data->philosophers[i].fork_left = i;
         data->philosophers[i].fork_right = (i + 1) % data->num_of_philos;
         data->philosophers[i].generic_data = data;
+        data->philosophers[i].philo_ko = 0;
         i++;
     }
 }
@@ -47,8 +48,8 @@ void ft_init_data(int argc, char **argus, t_data *data)
     data->philosophers = malloc(sizeof(t_philo) * data->num_of_philos);
     if (data->philosophers == NULL)
         return ;
-    data->thread_ids = malloc(sizeof(pthread_t) * data->num_of_philos);
-    data->mutexes = malloc(sizeof(pthread_mutex_t) * (data->num_of_philos + 1));
+    //data->thread_ids = malloc(sizeof(pthread_t) * data->num_of_philos);
+    data->mutexes = malloc(sizeof(pthread_mutex_t) * (data->num_of_philos));
     if (data->mutexes == NULL)
         return ;
     data->time_to_die = ft_long_atoi(argus[1]);
@@ -63,6 +64,42 @@ void ft_init_data(int argc, char **argus, t_data *data)
     if (data->num_of_philos < 0 || data->time_to_die < 0 || data->time_to_eat < 0 \
      || data->time_to_sleep < 0) {
         return ;
-     }
-    data->some_philo_ko = 0;
+    }
+    //data->some_philo_ko = 0;
+}
+
+/* Initialize all mutexes */
+
+void ft_init_mutexes(t_data *data)
+{
+    int i;
+
+    i = 0;
+    while(i < data->num_of_philos)
+    {
+        pthread_mutex_init(&data->mutexes[i], NULL);
+        pthread_mutex_init(&data->philosophers[i].last_ate_mutex, NULL);
+        pthread_mutex_init(&data->philosophers[i].philo_ko_mutex, NULL);
+        pthread_mutex_init(&data->philosophers[i].current_time_mutex, NULL);
+        i++;   
+    }
+}
+
+
+/* Destroy mutexes */
+
+void ft_destroy_mutexes(t_data *data)
+{
+    int i;
+    
+    i = 0;
+    while(i < data->num_of_philos)
+    {
+        pthread_mutex_destroy(&data->mutexes[i]);
+        pthread_mutex_destroy(&data->philosophers[i].last_ate_mutex);
+        pthread_mutex_destroy(&data->philosophers[i].philo_ko_mutex);
+        pthread_mutex_destroy(&data->philosophers[i].current_time_mutex);
+        printf("mutexes destroyed\n");
+        i++;
+    }
 }
