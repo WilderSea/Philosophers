@@ -6,7 +6,7 @@
 #    By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/14 17:02:35 by msintas-          #+#    #+#              #
-#    Updated: 2023/06/07 14:21:09 by msintas-         ###   ########.fr        #
+#    Updated: 2023/06/07 17:58:49 by msintas-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRCS	=	main.c \
 
 CC		=	gcc
 
-#CFLAGS	=   -Wextra -Wall -Werror -pthread
+#CFLAGS	=   -Wextra -Wall -Werror -pthread -fsanitize=thread
 CFLAGS	=   -pthread -fsanitize=thread
 
 RM		=	rm -rf

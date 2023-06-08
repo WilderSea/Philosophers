@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/07 16:08:38 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/08 13:20:06 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,9 @@ typedef struct s_philo
     int philo_ko; // 0 vivo, 1 muerto
     
     pthread_mutex_t last_ate_mutex;
-    pthread_mutex_t current_time_mutex;
+    pthread_mutex_t time_mutex;
     pthread_mutex_t philo_ko_mutex;
+    pthread_mutex_t printf_mutex;
     
 }   t_philo;
 

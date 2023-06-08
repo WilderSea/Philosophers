@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/07 16:05:15 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/08 13:21:05 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ void ft_init_mutexes(t_data *data)
         pthread_mutex_init(&data->mutexes[i], NULL);
         pthread_mutex_init(&data->philosophers[i].last_ate_mutex, NULL);
         pthread_mutex_init(&data->philosophers[i].philo_ko_mutex, NULL);
-        pthread_mutex_init(&data->philosophers[i].current_time_mutex, NULL);
+        pthread_mutex_init(&data->philosophers[i].time_mutex, NULL);
+        pthread_mutex_init(&data->philosophers[i].printf_mutex, NULL);
         i++;   
     }
 }
@@ -98,7 +99,8 @@ void ft_destroy_mutexes(t_data *data)
         pthread_mutex_destroy(&data->mutexes[i]);
         pthread_mutex_destroy(&data->philosophers[i].last_ate_mutex);
         pthread_mutex_destroy(&data->philosophers[i].philo_ko_mutex);
-        pthread_mutex_destroy(&data->philosophers[i].current_time_mutex);
+        pthread_mutex_destroy(&data->philosophers[i].time_mutex);
+        pthread_mutex_destroy(&data->philosophers[i].printf_mutex);
         printf("mutexes destroyed\n");
         i++;
     }

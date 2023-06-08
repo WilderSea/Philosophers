@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/07 16:12:44 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/08 13:26:37 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int ft_philo_sleeps(t_philo *philo)
 int ft_philo_eats(t_philo *philo)
 {
     pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_left]));
-
     if (ft_philo_ko(philo) == 1)
         return (1);
     pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_right]));
@@ -46,22 +45,24 @@ int ft_philo_eats(t_philo *philo)
         return (1);
     printf("%ld philo %d has taking left fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_left);
     printf("%ld philo %d has taking right fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_right);
+    pthread_mutex_lock(&(philo->time_mutex));
     ft_right_now(philo);
+    pthread_mutex_unlock(&(philo->time_mutex));
     printf(COLOR_GREEN "%ld philo %d is eating" COLOR_RESET "\n", philo->timestamp_in_ms, philo->philo_num);
-    
-    // ft_usleep_philo(philo); // hacer esta funcion para tunear el "usleep" xq no es exacto
+    // hacer esta funcion para tunear el "usleep" xq no es exacto
+    // ft_usleep_philo(philo, philo->generic_data->time_to_eat); 
     usleep(philo->generic_data->time_to_eat * 1000); // para que sean microsegundos, tiempo que pasa comiendo
     // Get the current time cuando filosofo termino de comer por ultima vez
-    pthread_mutex_lock(&(philo->current_time_mutex));
+    pthread_mutex_lock(&philo->time_mutex);
     gettimeofday(&philo->current_time, NULL); 
-    pthread_mutex_lock(&(philo->last_ate_mutex));
+    pthread_mutex_unlock(&philo->time_mutex);
+    pthread_mutex_lock(&philo->last_ate_mutex);
     philo->last_ate = philo->current_time;
-    pthread_mutex_unlock(&(philo->current_time_mutex));
-    pthread_mutex_unlock(&(philo->last_ate_mutex));
-
+    pthread_mutex_unlock(&philo->last_ate_mutex);
     if (ft_philo_ko(philo) == 1)
+    {
         return (1);
-    // Release the lock
+    }
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_right]);
     return (0);
@@ -92,12 +93,13 @@ void *ft_action(void *each_philo)
         {
             return (NULL);
         }
-            /* if not .....return (NULL); */
         ft_philo_thinks(philo);   
     }
         // para los prints y las variables que se modifican (last_ate, philo_ko)
-        // hay que hacer mutexes para evitar data racings 
+        // hay que hacer mutexes para evitar data racings
+        pthread_mutex_lock(&philo->printf_mutex);
         printf("Philosofo/Thread num: %d is exiting...\n", philo->philo_num);
+        pthread_mutex_unlock(&philo->printf_mutex);
 
         return (NULL);
 }
@@ -140,14 +142,17 @@ int ft_create_philos(t_data *data)
         // 1º check if philosophers ate specific number of times
 
         // 2º check if any philosopher died
-        
-        if (ft_checker(data) == 1)
+        i = 0;
+        while(i < data->num_of_philos)
         {
-            printf("hay un ko\n");
-            // terminar programa
-            return (0);
+            if (ft_checker(data) == 1)
+            {
+                printf("hay un ko\n");
+                // terminar programa
+                return (0);
+            }
+            i++;
         }
-        
     }
     
     // Wait for the threads to finish
@@ -155,7 +160,6 @@ int ft_create_philos(t_data *data)
     i = 0;
     while(i < data->num_of_philos)
     {
-        printf("dentro\n");
         result = pthread_join(data->philosophers[i].tid, NULL);
         if (result != 0) // on success, pthread_join returns 0
         {
