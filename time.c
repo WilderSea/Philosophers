@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 11:22:20 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/08 13:26:23 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/08 15:57:02 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,10 @@ Function to get the current time
 
 void ft_right_now(t_philo *philo) 
 {
+    pthread_mutex_lock(&philo->write_mutex);
     gettimeofday(&philo->current_time, NULL);
     philo->timestamp_in_ms = ft_capture_timestamp(philo->current_time, philo->start_time);
+    pthread_mutex_unlock(&philo->write_mutex);
 }
 
 /*
@@ -53,7 +55,7 @@ void ft_usleep_philo(t_philo *philo, long int waiting_time)
     long int finish_wait;
     long int now;
 
-    pthread_mutex_lock(&philo->time_mutex);
+    pthread_mutex_lock(&philo->write_mutex);
     gettimeofday(&philo->current_time, NULL);
     now = ft_capture_timestamp(philo->current_time, philo->start_time);
     finish_wait = now + waiting_time;
@@ -65,5 +67,5 @@ void ft_usleep_philo(t_philo *philo, long int waiting_time)
             break;
         usleep(240);
     }
-    pthread_mutex_unlock(&philo->time_mutex);
+    pthread_mutex_unlock(&philo->write_mutex);
 }

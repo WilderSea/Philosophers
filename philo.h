@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/08 13:20:06 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/08 16:26:04 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,8 @@ typedef struct s_philo
     
     int philo_ko; // 0 vivo, 1 muerto
     
-    pthread_mutex_t last_ate_mutex;
-    pthread_mutex_t time_mutex;
-    pthread_mutex_t philo_ko_mutex;
-    pthread_mutex_t printf_mutex;
+    pthread_mutex_t write_mutex;
+    pthread_mutex_t check_mutex;
     
 }   t_philo;
 
@@ -95,13 +93,8 @@ typedef struct s_data
     int num_of_forks; // num of mutexes
     
     t_philo *philosophers; // array de filosofos
-
-    //pthread_t *thread_ids;
     
     pthread_mutex_t *mutexes; // array de mutexes
-
-    //struct timeval start_time; // accedo al struct de time.h que permite coger timestamp 
-    //struct timeval current_time; // accedo al struct de time.h que permite coger timestamp 
     
     /* time limits */
     long int time_to_die;
@@ -128,7 +121,7 @@ int         ft_create_philos(t_data *data);
 /* time functions */
 long int ft_capture_timestamp(struct timeval current, struct timeval start);
 void ft_right_now(t_philo *philo);
-//void ft_usleep_philo(t_philo *philo);
+void ft_usleep_philo(t_philo *philo, long int waiting_time);
 int ft_checker(t_data *data); // comprueba si ha muerto y lo marca con una variable
 int ft_philo_ko(t_philo *philo);
 void ft_destroy_mutexes(t_data *data);
