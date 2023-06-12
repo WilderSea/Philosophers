@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/08 16:26:04 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/12 11:51:57 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ typedef struct s_data
     int num_must_eat; // optional
     
     int some_philo_ko;
-    
+    //pthread_mutex_t write_mutex;
     
 }   t_data;
 
@@ -126,5 +126,6 @@ int ft_checker(t_data *data); // comprueba si ha muerto y lo marca con una varia
 int ft_philo_ko(t_philo *philo);
 void ft_destroy_mutexes(t_data *data);
 void ft_init_mutexes(t_data *data);
+void ft_join_threads(t_data *data);
 
 #endif

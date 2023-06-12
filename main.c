@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:22 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/07 16:46:28 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/12 11:28:36 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ int main(int argc, char **argv)
     ft_init_mutexes(&data); // init all mutexes
 
     ft_create_philos(&data); // create threads
+
+    ft_join_threads(&data);
 
     ft_destroy_mutexes(&data);
 
