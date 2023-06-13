@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/12 12:56:01 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/13 11:45:46 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,18 @@
 void ft_philo_thinks(t_philo *philo)
 {
     ft_right_now(philo);
-    pthread_mutex_lock(&philo->write_mutex);
+    //pthread_mutex_lock(&philo->write_mutex);
     printf(COLOR_MAGENTA "%ld philo num %d is thinking" COLOR_RESET "\n ", philo->timestamp_in_ms, philo->philo_num);
-    pthread_mutex_unlock(&philo->write_mutex);
+    //pthread_mutex_unlock(&philo->write_mutex);
 }
 
 
 int ft_philo_sleeps(t_philo *philo)
 {
     ft_right_now(philo);
-    pthread_mutex_lock(&philo->write_mutex);
+    //pthread_mutex_lock(&philo->write_mutex);
     printf(COLOR_RED "%ld philo %d starts to sleep" COLOR_RESET "\n", philo->timestamp_in_ms, philo->philo_num);
-    pthread_mutex_unlock(&philo->write_mutex);
+    //pthread_mutex_unlock(&philo->write_mutex);
     ft_usleep_philo(philo, philo->generic_data->time_to_sleep);
     if (ft_philo_ko(philo) == 1)
         return (1);
@@ -43,19 +43,23 @@ int ft_philo_eats(t_philo *philo)
     if (ft_philo_ko(philo) == 1)
         return (1);
     ft_right_now(philo);
-    pthread_mutex_lock(&philo->write_mutex);
+    
     printf("%ld philo %d has taking left fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_left);
     printf("%ld philo %d has taking right fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_right);
-    pthread_mutex_unlock(&(philo->write_mutex));
+    
     ft_right_now(philo);
-    pthread_mutex_lock(&philo->write_mutex);
+    
     printf(COLOR_GREEN "%ld philo %d is eating" COLOR_RESET "\n", philo->timestamp_in_ms, philo->philo_num);
-    pthread_mutex_unlock(&(philo->write_mutex));
+    
     ft_usleep_philo(philo, philo->generic_data->time_to_eat); 
-    pthread_mutex_lock(&philo->write_mutex);
+    
+    pthread_mutex_lock(&philo->current_time_mutex);
     gettimeofday(&philo->current_time, NULL);
+    pthread_mutex_lock(&philo->last_ate_mutex);
     philo->last_ate = philo->current_time;
-    pthread_mutex_unlock(&philo->write_mutex);
+    pthread_mutex_unlock(&philo->current_time_mutex);
+    pthread_mutex_unlock(&philo->last_ate_mutex);
+    
     if (ft_philo_ko(philo) == 1)
         return (1);
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
@@ -71,16 +75,18 @@ void *ft_action(void *each_philo)
     
     philo = (t_philo *)each_philo;
     
-    philo->tid = pthread_self();
-    //printf("filosofo/thread id: %lu is starting\n", (unsigned long)philo->tid);
+    printf("filosofo/thread id: %lu is starting\n", (unsigned long)philo->tid);
 
     // mientras que ningun philo este ko, seguir con la simulacion
-    while(1)
+    while(1) // este while tiene que poder detenerse de alguna forma para llegar al ultimo null
+    // while (simulation is running) y cuando alguien muera, que se acabe la simulacion
+    // marcar la simulacion como que ha terminado
+    // tener en cuenta numero de comidas
     {
         //printf("philo ko or not: %d\n", philo->philo_ko);
         if (ft_philo_eats(philo) == 1)
         {
-            return (NULL); // despues de aqui deberia ir al join y destroy mutexes
+            return (NULL); // despues de aqui, este hilo llega al join
         }
         if (ft_philo_sleeps(philo) == 1) 
         {
@@ -88,14 +94,12 @@ void *ft_action(void *each_philo)
         }
         ft_philo_thinks(philo);   
     }
-    pthread_mutex_lock(&philo->write_mutex); // borrar este print, solo pruebas
     printf("Philosofo/Thread num: %d is exiting...\n", philo->philo_num);
-    pthread_mutex_unlock(&philo->write_mutex);
-    return (NULL);
+    return (NULL); // si desactivo el while, todos los hilos terminan aqui
 }
 
 
-int ft_create_philos(t_data *data)
+void ft_create_philos(t_data *data)
 {
     int i;
     int result; 
@@ -134,12 +138,15 @@ int ft_create_philos(t_data *data)
         // 2º check if any philosopher died
         if (ft_checker(data) == 1)  // ESTO podria ser un extra thread, en vez de una funcion
         {
+            
             // terminar programa
-            return (0);
+            //ft_join_threads(data);
+            //pthread_join(data->philosophers[i].tid, NULL);
+            return ;
         }
     }
     
-    return (0);
+    return ;
 }
 
 void ft_join_threads(t_data *data)
@@ -151,6 +158,8 @@ void ft_join_threads(t_data *data)
     while(i < data->num_of_philos)
     {
         printf("Joining i: %d\n", i);
+        printf("philo num: %d thread id: %ld\n", data->philosophers[i].philo_num, (unsigned long)data->philosophers[i].tid);
+        
         result = pthread_join(data->philosophers[i].tid, NULL);
         if (result != 0) // on success, pthread_join returns 0
         {

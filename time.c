@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 11:22:20 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/12 11:57:30 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/12 13:24:42 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,12 @@ Function to get the current time
 
 void ft_right_now(t_philo *philo) 
 {
-    pthread_mutex_lock(&philo->write_mutex);
+    //pthread_mutex_lock(&philo->write_mutex);
+    pthread_mutex_lock(&philo->current_time_mutex);
     gettimeofday(&philo->current_time, NULL);
     philo->timestamp_in_ms = ft_capture_timestamp(philo->current_time, philo->start_time);
-    pthread_mutex_unlock(&philo->write_mutex);
+    //pthread_mutex_unlock(&philo->write_mutex);
+    pthread_mutex_unlock(&philo->current_time_mutex);
 }
 
 /*
@@ -55,7 +57,8 @@ void ft_usleep_philo(t_philo *philo, long int waiting_time)
     long int finish_wait;
     long int now;
 
-    pthread_mutex_lock(&philo->write_mutex);
+    //pthread_mutex_lock(&philo->write_mutex);
+    pthread_mutex_lock(&philo->current_time_mutex);
     gettimeofday(&philo->current_time, NULL);
     now = ft_capture_timestamp(philo->current_time, philo->start_time);
     finish_wait = now + waiting_time;
@@ -65,11 +68,12 @@ void ft_usleep_philo(t_philo *philo, long int waiting_time)
         now = ft_capture_timestamp(philo->current_time, philo->start_time);
         if (ft_philo_ko(philo) == 1)
         {
-            // falta mutex unlock??
-            pthread_mutex_unlock(&philo->write_mutex);
+            pthread_mutex_unlock(&philo->current_time_mutex);
+            //pthread_mutex_unlock(&philo->write_mutex);
             break;   
         }
         usleep(240);
     }
-    pthread_mutex_unlock(&philo->write_mutex);
+    //pthread_mutex_unlock(&philo->write_mutex);
+    pthread_mutex_unlock(&philo->current_time_mutex);
 }
