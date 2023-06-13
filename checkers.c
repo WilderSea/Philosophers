@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/12 14:54:26 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/13 12:18:23 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int ft_checker(t_data *data)
             {
                 pthread_mutex_lock(&data->philosophers[i].philo_ko_mutex);
                 data->philosophers[i].philo_ko = 1;
+                printf("philo num: %d thread id: %ld\n", data->philosophers[i].philo_num, (unsigned long)data->philosophers[i].tid);
+                printf("philo KO: %d\n", data->philosophers[i].philo_ko);
                 pthread_mutex_unlock(&data->philosophers[i].philo_ko_mutex);
                 i++;
             }
@@ -55,6 +57,7 @@ int ft_checker(t_data *data)
 int ft_philo_ko(t_philo *philo)
 {
     pthread_mutex_lock(&philo->philo_ko_mutex);
+    printf("philo %d ko value %d\n",philo->philo_num ,philo->philo_ko );
     if (philo->philo_ko == 1)
     {
         pthread_mutex_unlock(&philo->philo_ko_mutex);

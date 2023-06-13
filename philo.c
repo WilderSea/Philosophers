@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/13 11:45:46 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/13 12:24:30 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,17 @@ int ft_philo_eats(t_philo *philo)
 {
     pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_left]));
     if (ft_philo_ko(philo) == 1)
+    {
+        pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
         return (1);
+    }
     pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_right]));
     if (ft_philo_ko(philo) == 1)
+    {
+        pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
+        pthread_mutex_unlock(&(philo->generic_data->mutexes[philo->fork_right]));
         return (1);
+    }
     ft_right_now(philo);
     
     printf("%ld philo %d has taking left fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_left);
@@ -61,7 +68,11 @@ int ft_philo_eats(t_philo *philo)
     pthread_mutex_unlock(&philo->last_ate_mutex);
     
     if (ft_philo_ko(philo) == 1)
+    {
+        pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
+        pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_right]);
         return (1);
+    }
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_right]);
     if (ft_philo_ko(philo) == 1)
@@ -86,10 +97,12 @@ void *ft_action(void *each_philo)
         //printf("philo ko or not: %d\n", philo->philo_ko);
         if (ft_philo_eats(philo) == 1)
         {
+            printf("philo %d return null\n", philo->philo_num);
             return (NULL); // despues de aqui, este hilo llega al join
         }
         if (ft_philo_sleeps(philo) == 1) 
         {
+          printf("2philo %d return null\n", philo->philo_num);
             return (NULL);
         }
         ft_philo_thinks(philo);   
@@ -116,6 +129,7 @@ void ft_create_philos(t_data *data)
         gettimeofday(&data->philosophers[i].start_time, NULL);
         data->philosophers[i].last_ate = data->philosophers[i].start_time;
         result = pthread_create(&data->philosophers[i].tid, NULL, &ft_action, &data->philosophers[i]);
+        printf("CREATE: philo num: %d thread id: %ld\n", data->philosophers[i].philo_num, (unsigned long)data->philosophers[i].tid);
         if (result != 0) // on success, pthread_create returns 0
         {
             ft_putstr_fd("Failed to create thread.\n", 2);
@@ -140,8 +154,10 @@ void ft_create_philos(t_data *data)
         {
             
             // terminar programa
-            //ft_join_threads(data);
+            ft_join_threads(data);
+            //printf("philo num: %d thread id: %ld\n", data->philosophers[i].philo_num, (unsigned long)data->philosophers[i].tid);
             //pthread_join(data->philosophers[i].tid, NULL);
+            
             return ;
         }
     }
@@ -157,8 +173,8 @@ void ft_join_threads(t_data *data)
     i = 0;
     while(i < data->num_of_philos)
     {
-        printf("Joining i: %d\n", i);
-        printf("philo num: %d thread id: %ld\n", data->philosophers[i].philo_num, (unsigned long)data->philosophers[i].tid);
+        
+        printf("JOIN: philo num: %d thread id: %ld\n", data->philosophers[i].philo_num, (unsigned long)data->philosophers[i].tid);
         
         result = pthread_join(data->philosophers[i].tid, NULL);
         if (result != 0) // on success, pthread_join returns 0
