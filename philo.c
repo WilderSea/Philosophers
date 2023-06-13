@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/13 12:24:30 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/13 13:30:53 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,22 @@ int ft_philo_sleeps(t_philo *philo)
 int ft_philo_eats(t_philo *philo)
 {
     pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_left]));
+    //printf("intento coger tenedor left\n");
     if (ft_philo_ko(philo) == 1)
     {
         pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
         return (1);
     }
+    //printf("intento coger tenedor right\n");
     pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_right]));
     if (ft_philo_ko(philo) == 1)
     {
+        //printf("muerte aqui\n");
         pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
         pthread_mutex_unlock(&(philo->generic_data->mutexes[philo->fork_right]));
         return (1);
     }
+    //printf("llega o no\n");
     ft_right_now(philo);
     
     printf("%ld philo %d has taking left fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_left);
@@ -86,7 +90,7 @@ void *ft_action(void *each_philo)
     
     philo = (t_philo *)each_philo;
     
-    printf("filosofo/thread id: %lu is starting\n", (unsigned long)philo->tid);
+    //printf("filosofo/thread id: %lu is starting\n", (unsigned long)philo->tid);
 
     // mientras que ningun philo este ko, seguir con la simulacion
     while(1) // este while tiene que poder detenerse de alguna forma para llegar al ultimo null
@@ -129,7 +133,7 @@ void ft_create_philos(t_data *data)
         gettimeofday(&data->philosophers[i].start_time, NULL);
         data->philosophers[i].last_ate = data->philosophers[i].start_time;
         result = pthread_create(&data->philosophers[i].tid, NULL, &ft_action, &data->philosophers[i]);
-        printf("CREATE: philo num: %d thread id: %ld\n", data->philosophers[i].philo_num, (unsigned long)data->philosophers[i].tid);
+        //printf("CREATE: philo num: %d thread id: %ld\n", data->philosophers[i].philo_num, (unsigned long)data->philosophers[i].tid);
         if (result != 0) // on success, pthread_create returns 0
         {
             ft_putstr_fd("Failed to create thread.\n", 2);
@@ -152,16 +156,9 @@ void ft_create_philos(t_data *data)
         // 2º check if any philosopher died
         if (ft_checker(data) == 1)  // ESTO podria ser un extra thread, en vez de una funcion
         {
-            
-            // terminar programa
-            ft_join_threads(data);
-            //printf("philo num: %d thread id: %ld\n", data->philosophers[i].philo_num, (unsigned long)data->philosophers[i].tid);
-            //pthread_join(data->philosophers[i].tid, NULL);
-            
-            return ;
+            return ; // terminar programa --> ft join threads
         }
     }
-    
     return ;
 }
 

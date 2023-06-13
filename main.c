@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:22 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/13 11:54:47 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/13 12:30:35 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,15 @@ int main(int argc, char **argv)
 
     ft_create_philos(&data); // create threads
 
-    //ft_join_threads(&data);
+    ft_join_threads(&data);
 
     ft_destroy_mutexes(&data);
 
+    // free memory
+
     printf("All threads have completed\n");
     
-    // checker
 
-    // joins
 
     return (0);
 }
