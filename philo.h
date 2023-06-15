@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/15 11:14:31 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/15 11:37:47 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,11 @@ void    ft_init_mutexes(t_data *data);
 void    ft_create_philos(t_data *data);
 void    ft_join_threads(t_data *data);
 void    ft_destroy_mutexes(t_data *data);
+
+/* Actions */
+int ft_philo_eats(t_philo *philo);
+int ft_philo_sleeps(t_philo *philo);
+void ft_philo_thinks(t_philo *philo);
 
 /* Time functions */
 long int ft_capture_timestamp(struct timeval current, struct timeval start);

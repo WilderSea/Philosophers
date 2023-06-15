@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/15 11:20:51 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/15 11:47:03 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,26 @@ int ft_philo_ko(t_philo *philo)
     return (0);
 }
 
-/* Add meal to a philosopher */
+/* Discount meal to a philosopher */
 
 void ft_count_meals(t_philo *philo)
 {
     pthread_mutex_lock(&philo->meals_mutex);
     philo->meals--;
-    printf("philo num: %d still %d meals left\n", philo->philo_num, philo->meals);
+    //printf("philo num: %d still %d meals left\n", philo->philo_num, philo->meals);
     pthread_mutex_unlock(&philo->meals_mutex);
 }
 
+/*void ft_check_args(int argc, char **argus, t_data *data)
+{
+    if (argc >= 5 && argc <= 6)
+    {
+        // hacer un bucle que pase por cada argc
+        // y lo compruebe, que son numeros y no letras, etc
+        
+    }
+    else
+    {
+        ft_print_usage();
+    }
+}*/

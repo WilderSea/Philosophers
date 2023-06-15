@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:22 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/14 13:44:13 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/15 12:22:41 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,10 @@ void	ft_print_usage(void)
 	exit(1);
 }
 
-
-
-/*void ft_check_args(int argc, char **argus, t_data *data)
+void	check_leaks(void)
 {
-    if (argc >= 5 && argc <= 6)
-    {
-        // hacer un bucle que pase por cada argc
-        // y lo compruebe, que son numeros y no letras, etc
-        
-    }
-    else
-    {
-        ft_print_usage();
-    }
-}*/
+	system("leaks -q philo");
+}
 
 
 
@@ -45,6 +34,7 @@ int main(int argc, char **argv)
     
     t_data  data;
     
+    //check_leaks();
     //ft_check_args(argc, &argv[1], &data); // TO DO **
 
     ft_init_data(argc, &argv[1], &data); // init generic data
@@ -59,11 +49,11 @@ int main(int argc, char **argv)
 
     ft_destroy_mutexes(&data);
 
+
     // free memory
 
     printf("All threads have completed\n");
     
-
 
     return (0);
 }
