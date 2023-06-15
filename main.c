@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:22 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/15 12:22:41 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/15 13:13:34 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,37 +20,43 @@ void	ft_print_usage(void)
 	ft_putstr_fd("Example : ./philo 15 8000 7000 6000\n", 1);
 	exit(1);
 }
+/* 
+Free memory to avoid leaks 
+*/
 
-void	check_leaks(void)
+void ft_free_resources(t_data *data)
 {
-	system("leaks -q philo");
+    free(data->philosophers);
+    free(data->mutexes);
 }
 
-
-
+/* 
+Initializes program data and threads, waits for completion, and cleans up 
+resources. Returns 0 to indicate successful execution.
+*/
 
 int main(int argc, char **argv)
 {
     
     t_data  data;
     
-    //check_leaks();
+    //atexit(check_leaks);
     //ft_check_args(argc, &argv[1], &data); // TO DO **
+    ft_check_args(argc, &argv[1]);
 
-    ft_init_data(argc, &argv[1], &data); // init generic data
+    ft_init_data(argc, &argv[1], &data);
 
-    ft_init_philos(&data); // init data para cada philosofo
+    ft_init_philos(&data);
 
-    ft_init_mutexes(&data); // init all mutexes
+    ft_init_mutexes(&data);
 
-    ft_create_philos(&data); // create threads
+    ft_create_philos(&data);
 
     ft_join_threads(&data);
 
     ft_destroy_mutexes(&data);
 
-
-    // free memory
+    ft_free_resources(&data);
 
     printf("All threads have completed\n");
     

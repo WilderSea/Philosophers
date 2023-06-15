@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/15 11:20:41 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/15 13:00:12 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void ft_init_data(int argc, char **argus, t_data *data)
     if (argc == 6)
     {
         data->num_must_eat = ft_atoi(argus[4]);
-        printf("num of times must eat: %d\n", data->num_must_eat);
         if (data->num_must_eat <= 0)
             return;
     }
@@ -104,4 +103,3 @@ void ft_destroy_mutexes(t_data *data)
     }
 }
 
-/* Free memory */

@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/15 11:47:03 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/15 14:54:53 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,53 @@ void ft_count_meals(t_philo *philo)
     pthread_mutex_unlock(&philo->meals_mutex);
 }
 
-/*void ft_check_args(int argc, char **argus, t_data *data)
+
+void ft_check_digits(unsigned int index, char *argu)
+{
+    if (ft_isdigit(*argu))
+    {
+        printf("Character at index %u is a digit: %c\n", index, *argu);
+        //return ;
+    }
+    else
+    {
+        printf("Character at index %u is not a digit: %c\n", index, *argu);
+    }
+}
+/*
+Inside the loop, the function f is called with two arguments: 
+the current index i and a pointer to the current character &s[i]. 
+The purpose of passing the index and the character is to allow the function f 
+to perform some operation on the character based on its index.
+*/
+
+void ft_check_args(int argc, char **argus)
 {
     if (argc >= 5 && argc <= 6)
     {
-        // hacer un bucle que pase por cada argc
-        // y lo compruebe, que son numeros y no letras, etc
+        int i;
+
+        i = 0;
+        while (i < argc)
+        {
+            //printf("argc es: %s\n", argus[i]);
+            ft_striteri(argus[i], ft_check_digits);
+            i++;
+        }
+        
         
     }
     else
     {
         ft_print_usage();
     }
-}*/
+}
+
+/* Check system leaks */
+
+
+void	check_leaks(void)
+{
+	system("leaks -q philo");
+}
+

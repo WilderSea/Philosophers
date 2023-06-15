@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/15 11:37:47 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/15 14:51:26 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ typedef struct s_data
     long int time_to_die;
     long int time_to_eat; 
     long int time_to_sleep;
-    int running;
 }   t_data;
 
 
@@ -89,10 +88,17 @@ void ft_usleep_philo(t_philo *philo, long int waiting_time);
 int ft_checker(t_data *data);
 int ft_philo_ko(t_philo *philo);
 void ft_count_meals(t_philo *philo);
+//void ft_check_args(int argc, char **argus, t_data *data);
+void ft_check_args(int argc, char **argus);
+void	check_leaks(void);
+void	ft_print_usage(void);
+void ft_check_digits(unsigned int index, char *argu);
 
 /* Utils */
 int         ft_atoi(const char *str);
 long int	ft_long_atoi(const char *str);
 void	    ft_putstr_fd(char *s, int fd);
+void	ft_striteri(char *s, void (*f)(unsigned int, char*));
+int	ft_isdigit(int c);
 
 #endif
