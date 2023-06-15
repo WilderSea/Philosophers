@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:22 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/13 12:30:35 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/14 13:44:13 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,7 @@ void	ft_print_usage(void)
     }
 }*/
 
-/*
 
-    bucle que compruebe la diferncai entre la ultima vez que comio y ahora.
-    Este bucle comprueba todos los filosofos estan vivos. Si uno muere, establece
-    some_philos_ko a 1 para que los demas mueran. Es aconsejable hacer un join a todos los
-
-*/
 
 
 int main(int argc, char **argv)

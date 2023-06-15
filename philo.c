@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/13 13:30:53 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/15 11:26:25 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,14 @@
 void ft_philo_thinks(t_philo *philo)
 {
     ft_right_now(philo);
-    //pthread_mutex_lock(&philo->write_mutex);
     printf(COLOR_MAGENTA "%ld philo num %d is thinking" COLOR_RESET "\n ", philo->timestamp_in_ms, philo->philo_num);
-    //pthread_mutex_unlock(&philo->write_mutex);
 }
 
 
 int ft_philo_sleeps(t_philo *philo)
 {
     ft_right_now(philo);
-    //pthread_mutex_lock(&philo->write_mutex);
     printf(COLOR_RED "%ld philo %d starts to sleep" COLOR_RESET "\n", philo->timestamp_in_ms, philo->philo_num);
-    //pthread_mutex_unlock(&philo->write_mutex);
     ft_usleep_philo(philo, philo->generic_data->time_to_sleep);
     if (ft_philo_ko(philo) == 1)
         return (1);
@@ -37,22 +33,18 @@ int ft_philo_sleeps(t_philo *philo)
 int ft_philo_eats(t_philo *philo)
 {
     pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_left]));
-    //printf("intento coger tenedor left\n");
     if (ft_philo_ko(philo) == 1)
     {
         pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
         return (1);
     }
-    //printf("intento coger tenedor right\n");
     pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_right]));
     if (ft_philo_ko(philo) == 1)
     {
-        //printf("muerte aqui\n");
         pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
         pthread_mutex_unlock(&(philo->generic_data->mutexes[philo->fork_right]));
         return (1);
     }
-    //printf("llega o no\n");
     ft_right_now(philo);
     
     printf("%ld philo %d has taking left fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_left);
@@ -81,6 +73,10 @@ int ft_philo_eats(t_philo *philo)
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_right]);
     if (ft_philo_ko(philo) == 1)
         return (1);
+    if (philo->generic_data->num_must_eat != 0)
+    {
+        ft_count_meals(philo);
+    }
     return (0);
 }
 
@@ -89,30 +85,20 @@ void *ft_action(void *each_philo)
     t_philo *philo;
     
     philo = (t_philo *)each_philo;
-    
-    //printf("filosofo/thread id: %lu is starting\n", (unsigned long)philo->tid);
-
-    // mientras que ningun philo este ko, seguir con la simulacion
-    while(1) // este while tiene que poder detenerse de alguna forma para llegar al ultimo null
-    // while (simulation is running) y cuando alguien muera, que se acabe la simulacion
-    // marcar la simulacion como que ha terminado
-    // tener en cuenta numero de comidas
+    while(philo->meals != 0)
     {
-        //printf("philo ko or not: %d\n", philo->philo_ko);
         if (ft_philo_eats(philo) == 1)
         {
-            printf("philo %d return null\n", philo->philo_num);
-            return (NULL); // despues de aqui, este hilo llega al join
+            return (NULL);
         }
         if (ft_philo_sleeps(philo) == 1) 
         {
-          printf("2philo %d return null\n", philo->philo_num);
             return (NULL);
         }
         ft_philo_thinks(philo);   
     }
     printf("Philosofo/Thread num: %d is exiting...\n", philo->philo_num);
-    return (NULL); // si desactivo el while, todos los hilos terminan aqui
+    return (NULL);
 }
 
 
@@ -126,15 +112,14 @@ void ft_create_philos(t_data *data)
     while(i < data->num_of_philos)
     {
         // comprobar pares o impares e iniciar unos despues que otros
-        if (data->philosophers[i].philo_num % 2 != 0)
+        /*if (data->philosophers[i].philo_num % 2 != 0)
         {
             usleep(40);
-        } // aqui todavia no hace falta mutex porque no es un hilo, es main process
+        }*/ // aqui todavia no hace falta mutex porque no es un hilo, es main process
         gettimeofday(&data->philosophers[i].start_time, NULL);
         data->philosophers[i].last_ate = data->philosophers[i].start_time;
         result = pthread_create(&data->philosophers[i].tid, NULL, &ft_action, &data->philosophers[i]);
-        //printf("CREATE: philo num: %d thread id: %ld\n", data->philosophers[i].philo_num, (unsigned long)data->philosophers[i].tid);
-        if (result != 0) // on success, pthread_create returns 0
+        if (result != 0)
         {
             ft_putstr_fd("Failed to create thread.\n", 2);
             exit (1);
@@ -154,9 +139,9 @@ void ft_create_philos(t_data *data)
         // 1º check if philosophers ate specific number of times
 
         // 2º check if any philosopher died
-        if (ft_checker(data) == 1)  // ESTO podria ser un extra thread, en vez de una funcion
+        if (ft_checker(data) == 1) 
         {
-            return ; // terminar programa --> ft join threads
+            return ;
         }
     }
     return ;
