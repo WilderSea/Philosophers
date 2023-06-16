@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/16 16:30:01 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/16 17:23:30 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void *ft_action(void *each_philo)
     t_philo *philo;
     
     philo = (t_philo *)each_philo;
-    while(philo->meals != 0)
+    //while(philo->meals != 0)
+    while(1)
     {
         if (ft_philo_eats(philo) == 1)
         {
@@ -61,11 +62,16 @@ void ft_create_philos(t_data *data)
         }
         i++;   
     }
-    while(1)
+    /*while(1)
     {
         usleep(500);
+        //if (ft_checker(data) == 1 || philo->meals != 0)
         if (ft_checker(data) == 1)
             return ;
+    }*/
+    while (ft_checker(data) != 1 || data->ate_everything != 0)
+    {
+        usleep(500);
     }
     return ;
 }

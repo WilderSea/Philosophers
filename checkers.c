@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/16 16:37:27 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/16 17:22:06 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int ft_checker(t_data *data)
             {
                 pthread_mutex_lock(&data->philosophers[i].philo_ko_mutex);
                 data->philosophers[i].philo_ko = 1;
-                if (data->num_of_philos == 1)
+                if (data->num_of_philos <= 2)
                 {
                     pthread_mutex_unlock(&data->mutexes[data->philosophers[i].fork_right]); 
                 }
@@ -75,6 +75,11 @@ void ft_count_meals(t_philo *philo)
 {
     pthread_mutex_lock(&philo->meals_mutex);
     philo->meals--;
+    printf("philo num: %d meals left: %d\n", philo->philo_num, philo->meals);
+    if (philo->meals < 0)
+    {
+        philo->generic_data->ate_everything = 1;
+    }
     pthread_mutex_unlock(&philo->meals_mutex);
 }
 
