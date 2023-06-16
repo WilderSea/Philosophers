@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/15 15:08:36 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/16 16:21:09 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ typedef struct s_data
 
 /* Main functions */
 void    ft_init_data(int argc, char **argus, t_data *data);
-void    ft_init_philos(t_data *data);
+void    ft_init_philos(int argc, t_data *data);
 void    ft_init_mutexes(t_data *data);
 void    ft_create_philos(t_data *data);
 void    ft_join_threads(t_data *data);

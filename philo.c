@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/15 12:34:15 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/16 16:30:01 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void ft_create_philos(t_data *data)
     while(i < data->num_of_philos)
     {
         if (data->philosophers[i].philo_num % 2 != 0)
-            usleep(400);
+            usleep(40);
         gettimeofday(&data->philosophers[i].start_time, NULL);
         data->philosophers[i].last_ate = data->philosophers[i].start_time;
         result = pthread_create(&data->philosophers[i].tid, NULL, &ft_action, &data->philosophers[i]);
@@ -64,10 +64,8 @@ void ft_create_philos(t_data *data)
     while(1)
     {
         usleep(500);
-        if (ft_checker(data) == 1) 
-        {
+        if (ft_checker(data) == 1)
             return ;
-        }
     }
     return ;
 }

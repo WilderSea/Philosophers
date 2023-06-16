@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:22 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/15 13:13:34 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/16 16:21:00 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,11 @@ int main(int argc, char **argv)
     t_data  data;
     
     //atexit(check_leaks);
-    //ft_check_args(argc, &argv[1], &data); // TO DO **
     ft_check_args(argc, &argv[1]);
 
     ft_init_data(argc, &argv[1], &data);
 
-    ft_init_philos(&data);
+    ft_init_philos(argc, &data);
 
     ft_init_mutexes(&data);
 

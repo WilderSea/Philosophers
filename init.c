@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/15 13:00:12 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/16 16:21:59 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ starting from 0. Connect the "philo struct" with the "data struct" to have acces
 from each thread to the main program data and fill this pointer with struct data.
 */
 
-void ft_init_philos(t_data *data)
+void ft_init_philos(int argc, t_data *data)
 {
     int i;
 
@@ -61,7 +61,11 @@ void ft_init_philos(t_data *data)
         data->philosophers[i].fork_right = (i + 1) % data->num_of_philos;
         data->philosophers[i].generic_data = data;
         data->philosophers[i].philo_ko = 0;
-        data->philosophers[i].meals = data->num_must_eat;
+        data->philosophers[i].meals = -1;
+        if (argc == 6)
+        {
+            data->philosophers[i].meals = data->num_must_eat;
+        }
         i++;
     }
 }
