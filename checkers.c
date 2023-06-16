@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/15 14:54:53 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:09:07 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,19 @@ void ft_count_meals(t_philo *philo)
 
 void ft_check_digits(unsigned int index, char *argu)
 {
-    if (ft_isdigit(*argu))
+    if (!ft_isdigit(*argu))
+    {
+        ft_print_usage();
+    }
+    /*if (ft_isdigit(*argu))
     {
         printf("Character at index %u is a digit: %c\n", index, *argu);
-        //return ;
-    }
+        
+    }*/
     else
     {
-        printf("Character at index %u is not a digit: %c\n", index, *argu);
+        //printf("Character at index %u is not a digit: %c\n", index, *argu);
+        printf("Character at index %u is a digit: %c\n", index, *argu);
     }
 }
 /*
@@ -109,7 +114,7 @@ void ft_check_args(int argc, char **argus)
         i = 0;
         while (i < argc)
         {
-            //printf("argc es: %s\n", argus[i]);
+            printf("argc es: %s\n", argus[i]);
             ft_striteri(argus[i], ft_check_digits);
             i++;
         }
