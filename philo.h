@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/19 11:35:28 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 13:06:09 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ typedef struct s_data
 
 
 /* Main functions */
-void    ft_init_data(int argc, char **argus, t_data *data);
+int    ft_init_data(int argc, char **argus, t_data *data);
 void    ft_init_philos(int argc, t_data *data);
 void    ft_init_mutexes(t_data *data);
 void    ft_create_philos(t_data *data);
@@ -100,7 +100,7 @@ void ft_check_digits(unsigned int index, char *argu);
 
 /* Utils */
 int         ft_atoi(const char *str);
-long int	ft_long_atoi(const char *str);
+//long int	ft_long_atoi(const char *str);
 void	    ft_putstr_fd(char *s, int fd);
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 int	ft_isdigit(int c);

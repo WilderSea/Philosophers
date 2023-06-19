@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/19 12:54:36 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 13:07:05 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,20 @@
 
 /*
     Initialize generic data for the program. 
-    If any of the values is less than 0 the program will not run.
+    If any of the values is not appropiate the program will not run.
 */
 
-void ft_init_data(int argc, char **argus, t_data *data)
+int ft_init_data(int argc, char **argus, t_data *data)
 {
     data->num_of_philos = ft_atoi(argus[0]);
     data->num_of_forks = data->num_of_philos;
     data->philosophers = malloc(sizeof(t_philo) * data->num_of_philos);
     if (data->philosophers == NULL)
-        return ;
+        return (1);
     data->mutexes = malloc(sizeof(pthread_mutex_t) * (data->num_of_philos));
     if (data->mutexes == NULL)
-        return ;
+        return (1);
     data->time_to_die = ft_atoi(argus[1]);
-    printf("tiime to : %ld\n", data->time_to_die);
     data->time_to_eat = ft_atoi(argus[2]);
     data->time_to_sleep = ft_atoi(argus[3]);
     if (argc == 6)
@@ -36,12 +35,13 @@ void ft_init_data(int argc, char **argus, t_data *data)
         data->num_must_eat = ft_atoi(argus[4]);
         data->ate_everything = 0;
         if (data->num_must_eat <= 0)
-            return;
+            return (1);
     }
     if (data->num_of_philos < 1 || data->time_to_die < 1 || data->time_to_eat < 1 \
      || data->time_to_sleep < 1) {
-        return ;
+        return (1);
     }
+    return (0);
 }
 
 /*
