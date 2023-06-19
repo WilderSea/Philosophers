@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:36:41 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/19 10:39:10 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 12:22:31 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void ft_philo_thinks(t_philo *philo)
 int ft_philo_sleeps(t_philo *philo)
 {
     ft_right_now(philo);
-    printf(COLOR_RED "%ld philo %d starts to sleep" COLOR_RESET "\n", philo->timestamp_in_ms, philo->philo_num);
+    printf(COLOR_RED "%ld philo %d is sleeping" COLOR_RESET "\n", philo->timestamp_in_ms, philo->philo_num);
     ft_usleep_philo(philo, philo->generic_data->time_to_sleep);
     if (ft_philo_ko(philo) == 1)
         return (1);

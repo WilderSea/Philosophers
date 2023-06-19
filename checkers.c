@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/19 11:54:50 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 12:37:59 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int ft_checker(t_data *data)
         pthread_mutex_lock(&data->philosophers[i].last_ate_mutex);
         if (ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].last_ate) >= data->time_to_die)
         {
-            printf(COLOR_BLUE "%ld philo has died %i" COLOR_RESET "\n", ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].start_time), i + 1);
+            printf(COLOR_BLUE "%ld philo %d has died" COLOR_RESET "\n", ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].start_time), i + 1);
             pthread_mutex_unlock(&data->philosophers[i].last_ate_mutex);
             ft_set_philos_as_ko(data);
             return (1);
@@ -107,7 +107,7 @@ int ft_finished_meals(t_philo *philo)
         pthread_mutex_lock(&philo->finished_mutex);
         if (philo->meals == philo->generic_data->num_must_eat + 1)
         {
-            printf("first filo num: %d to ate everything\n", philo->philo_num);
+            //printf("first filo num: %d to ate everything\n", philo->philo_num);
             philo->generic_data->ate_everything = 1;
             pthread_mutex_unlock(&philo->finished_mutex);
             return (1);

@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/19 11:54:02 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 12:54:36 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void ft_init_data(int argc, char **argus, t_data *data)
     if (data->mutexes == NULL)
         return ;
     data->time_to_die = ft_atoi(argus[1]);
+    printf("tiime to : %ld\n", data->time_to_die);
     data->time_to_eat = ft_atoi(argus[2]);
     data->time_to_sleep = ft_atoi(argus[3]);
     if (argc == 6)
@@ -37,8 +38,8 @@ void ft_init_data(int argc, char **argus, t_data *data)
         if (data->num_must_eat <= 0)
             return;
     }
-    if (data->num_of_philos < 0 || data->time_to_die < 0 || data->time_to_eat < 0 \
-     || data->time_to_sleep < 0) {
+    if (data->num_of_philos < 1 || data->time_to_die < 1 || data->time_to_eat < 1 \
+     || data->time_to_sleep < 1) {
         return ;
     }
 }
