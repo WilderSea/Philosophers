@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:36:41 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/16 16:34:55 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 10:39:10 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int ft_leave_forks(t_philo *philo)
 void ft_philo_thinks(t_philo *philo)
 {
     ft_right_now(philo);
-    printf(COLOR_MAGENTA "%ld philo num %d is thinking" COLOR_RESET "\n ", philo->timestamp_in_ms, philo->philo_num);
+    printf(COLOR_MAGENTA "%ld philo num %d is thinking" COLOR_RESET "\n", philo->timestamp_in_ms, philo->philo_num);
 }
 
 int ft_philo_sleeps(t_philo *philo)
@@ -79,7 +79,7 @@ int ft_philo_eats(t_philo *philo)
         return (1);
     if (ft_philo_ko(philo) == 1)
         return (1);
-    if (philo->generic_data->num_must_eat != 0)
+    if (philo->generic_data->num_must_eat > 0)
         ft_count_meals(philo);
     return (0);
 }

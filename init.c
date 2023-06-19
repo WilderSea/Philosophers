@@ -6,15 +6,15 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/16 17:22:54 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 11:54:02 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 /*
-Initialize generic data for the program. If any of the values is less than 0
-the program will not run.
+    Initialize generic data for the program. 
+    If any of the values is less than 0 the program will not run.
 */
 
 void ft_init_data(int argc, char **argus, t_data *data)
@@ -65,7 +65,7 @@ void ft_init_philos(int argc, t_data *data)
         data->philosophers[i].meals = -1;
         if (argc == 6)
         {
-            data->philosophers[i].meals = data->num_must_eat;
+            data->philosophers[i].meals = 0;
         }
         i++;
     }
@@ -85,6 +85,7 @@ void ft_init_mutexes(t_data *data)
         pthread_mutex_init(&data->philosophers[i].last_ate_mutex, NULL);
         pthread_mutex_init(&data->philosophers[i].philo_ko_mutex, NULL);
         pthread_mutex_init(&data->philosophers[i].meals_mutex, NULL);
+        pthread_mutex_init(&data->philosophers[i].finished_mutex, NULL);
         i++;   
     }
 }
@@ -103,8 +104,8 @@ void ft_destroy_mutexes(t_data *data)
         pthread_mutex_destroy(&data->philosophers[i].last_ate_mutex);
         pthread_mutex_destroy(&data->philosophers[i].philo_ko_mutex);
         pthread_mutex_destroy(&data->philosophers[i].meals_mutex);
+        pthread_mutex_destroy(&data->philosophers[i].finished_mutex);
         printf("mutexes destroyed\n");
         i++;
     }
 }
-

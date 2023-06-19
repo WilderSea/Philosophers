@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:22 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/16 16:21:00 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 10:45:51 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,41 @@ void	ft_print_usage(void)
 	ft_putstr_fd("Example : ./philo 15 8000 7000 6000\n", 1);
 	exit(1);
 }
+
+/* Check if the arguments passed to the program are digits */
+
+void ft_check_digits(unsigned int index, char *argu)
+{
+    (void)index;
+    if (!ft_isdigit(*argu))
+    {
+        ft_print_usage();
+    }
+}
+/*
+    Inside the loop, the function iterates through each argument
+    and performs a check in every index.
+*/
+
+void ft_check_args(int argc, char **argus)
+{
+    if (argc >= 5 && argc <= 6)
+    {
+        int i;
+
+        i = 0;
+        while (i < argc)
+        {
+            ft_striteri(argus[i], ft_check_digits);
+            i++;
+        }
+    }
+    else
+    {
+        ft_print_usage();
+    }
+}
+
 /* 
 Free memory to avoid leaks 
 */
@@ -28,6 +63,13 @@ void ft_free_resources(t_data *data)
 {
     free(data->philosophers);
     free(data->mutexes);
+}
+
+/* Check system leaks */
+
+void	check_leaks(void)
+{
+	system("leaks -q philo");
 }
 
 /* 

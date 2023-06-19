@@ -6,12 +6,34 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/16 17:22:06 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 11:54:50 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/* 
+    Function to set every philo as ko. When one philosopher is ko,
+    all the others must be ko as well, so the threads can be joined. 
+*/
+
+void ft_set_philos_as_ko(t_data *data)
+{
+    int i;
+
+    i = 0;
+    while (i < data->num_of_philos)
+    {
+        pthread_mutex_lock(&data->philosophers[i].philo_ko_mutex);
+        data->philosophers[i].philo_ko = 1;
+        if (data->num_of_philos <= 2)
+        {
+            pthread_mutex_unlock(&data->mutexes[data->philosophers[i].fork_right]); 
+        }
+        pthread_mutex_unlock(&data->philosophers[i].philo_ko_mutex);
+        i++;
+    }
+}
 /* 
 Function to check time left for each philosopher and decide if it is KO.
 It checks the values stored in each philo struct. If the difference between "now"
@@ -31,20 +53,8 @@ int ft_checker(t_data *data)
         if (ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].last_ate) >= data->time_to_die)
         {
             printf(COLOR_BLUE "%ld philo has died %i" COLOR_RESET "\n", ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].start_time), i + 1);
-            printf("philo num: %d thread id: %ld\n", data->philosophers[i].philo_num, (unsigned long)data->philosophers[i].tid);
             pthread_mutex_unlock(&data->philosophers[i].last_ate_mutex);
-            i = 0;
-            while (i < data->num_of_philos)
-            {
-                pthread_mutex_lock(&data->philosophers[i].philo_ko_mutex);
-                data->philosophers[i].philo_ko = 1;
-                if (data->num_of_philos <= 2)
-                {
-                    pthread_mutex_unlock(&data->mutexes[data->philosophers[i].fork_right]); 
-                }
-                pthread_mutex_unlock(&data->philosophers[i].philo_ko_mutex);
-                i++;
-            }
+            ft_set_philos_as_ko(data);
             return (1);
         }
         else
@@ -56,6 +66,9 @@ int ft_checker(t_data *data)
     return (0);
 }
 
+/* 
+    Function that checks if a philo has been set as ko.
+*/
 
 int ft_philo_ko(t_philo *philo)
 {
@@ -69,59 +82,40 @@ int ft_philo_ko(t_philo *philo)
     return (0);
 }
 
-/* Discount one meal to a philosopher */
+/* Add one meal to a philosopher */
 
 void ft_count_meals(t_philo *philo)
 {
     pthread_mutex_lock(&philo->meals_mutex);
-    philo->meals--;
-    printf("philo num: %d meals left: %d\n", philo->philo_num, philo->meals);
-    if (philo->meals < 0)
-    {
-        philo->generic_data->ate_everything = 1;
-    }
+    philo->meals++;
+    //printf("philo %d ate: %d times\n", philo->philo_num, philo->meals);
     pthread_mutex_unlock(&philo->meals_mutex);
 }
 
-/* Check if the arguments passed to the program are digits */
-
-void ft_check_digits(unsigned int index, char *argu)
-{
-    (void)index;
-    if (!ft_isdigit(*argu))
-        ft_print_usage();
-}
 /*
-Inside the loop, the function f is called with two arguments: 
-the current index i and a pointer to the current character &s[i]. 
-The purpose of passing the index and the character is to allow the function f 
-to perform some operation on the character based on its index.
+    Function to check if all philosophers ate at least the required
+    number of times. If so, set everything as eaten and finish simulation.
 */
 
-void ft_check_args(int argc, char **argus)
+int ft_finished_meals(t_philo *philo)
 {
-    if (argc >= 5 && argc <= 6)
-    {
-        int i;
+    int i;
 
-        i = 0;
-        while (i < argc)
+    i = 0;
+    while(i < philo->generic_data->num_of_philos) 
+    {
+        pthread_mutex_lock(&philo->finished_mutex);
+        if (philo->meals == philo->generic_data->num_must_eat + 1)
         {
-            ft_striteri(argus[i], ft_check_digits);
-            i++;
+            printf("first filo num: %d to ate everything\n", philo->philo_num);
+            philo->generic_data->ate_everything = 1;
+            pthread_mutex_unlock(&philo->finished_mutex);
+            return (1);
         }
+        pthread_mutex_unlock(&philo->finished_mutex);
+        i++;
     }
-    else
-    {
-        ft_print_usage();
-    }
+    return (0);
 }
 
-/* Check system leaks */
-
-
-void	check_leaks(void)
-{
-	system("leaks -q philo");
-}
 

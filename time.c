@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 11:22:20 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/13 16:15:53 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 10:49:36 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /*
 
-Function to return a timestamp in miliseconds.
+    Function to return a timestamp in miliseconds.
 
 */
 
@@ -32,7 +32,7 @@ long int ft_capture_timestamp(struct timeval current, struct timeval start)
 
 /*
 
-Function to get the current time
+    Function to get the current time
 
 */
 
@@ -46,7 +46,7 @@ void ft_right_now(t_philo *philo)
 
 /*
 
-Function to improve usleep default function
+    Function to improve usleep default function
 
 */
 

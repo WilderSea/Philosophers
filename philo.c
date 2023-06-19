@@ -6,21 +6,23 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/16 17:23:30 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 11:54:43 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-
+/* 
+    Every thread will execute this routine. Infinite loop will end only when
+    a philo is ko (actions return 1) or when have eaten all their meals.
+*/
 
 void *ft_action(void *each_philo)
 {
     t_philo *philo;
     
     philo = (t_philo *)each_philo;
-    //while(philo->meals != 0)
-    while(1)
+    while(ft_finished_meals(philo) != 1)
     {
         if (ft_philo_eats(philo) == 1)
         {
@@ -37,9 +39,11 @@ void *ft_action(void *each_philo)
 }
 
 /* 
-Function to create threads, one per philosopher.
-Main thread continues executing the code that follows the pthread_create 
-call without waiting for the newly created threads to finish its execution.
+    Function to create threads, one per philosopher. This function as a main 
+    thread will continue executing an infinite loop that will run while all 
+    philos are alive and until they still have to eat. Important to check 
+    about the food along with the ko, to stop simulation after eating enough, 
+    avoiding unwanted ko's.
 */
 
 void ft_create_philos(t_data *data)
@@ -62,20 +66,18 @@ void ft_create_philos(t_data *data)
         }
         i++;   
     }
-    /*while(1)
+    while (ft_checker(data) != 1)
     {
         usleep(500);
-        //if (ft_checker(data) == 1 || philo->meals != 0)
-        if (ft_checker(data) == 1)
-            return ;
-    }*/
-    while (ft_checker(data) != 1 || data->ate_everything != 0)
-    {
-        usleep(500);
+        if (data->ate_everything != 0)
+        {
+            return;
+        }
     }
     return ;
 }
 
+/* Joining threads. On success, pthread_join returns 0 */
 void ft_join_threads(t_data *data)
 {
     int i;
@@ -88,7 +90,7 @@ void ft_join_threads(t_data *data)
         printf("JOIN: philo num: %d thread id: %ld\n", data->philosophers[i].philo_num, (unsigned long)data->philosophers[i].tid);
         
         result = pthread_join(data->philosophers[i].tid, NULL);
-        if (result != 0) // on success, pthread_join returns 0
+        if (result != 0)
         {
             ft_putstr_fd("Failed to join the thread.\n", 2);
             exit (1);
