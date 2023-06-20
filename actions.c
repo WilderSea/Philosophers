@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:36:41 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/19 12:22:31 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 14:05:51 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int ft_leave_forks(t_philo *philo)
 void ft_philo_thinks(t_philo *philo)
 {
     ft_right_now(philo);
-    printf(COLOR_MAGENTA "%ld philo num %d is thinking" COLOR_RESET "\n", philo->timestamp_in_ms, philo->philo_num);
+    printf(COLOR_MAGENTA "%ld philo %d is thinking" COLOR_RESET "\n", philo->timestamp_in_ms, philo->philo_num);
 }
 
 int ft_philo_sleeps(t_philo *philo)

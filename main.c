@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:22 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/19 13:13:43 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 15:23:12 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,6 @@ void ft_check_args(int argc, char **argus)
     }
 }
 
-/* 
-Free memory to avoid leaks 
-*/
-
-void ft_free_resources(t_data *data)
-{
-    free(data->philosophers);
-    free(data->mutexes);
-}
-
 /* Check system leaks */
 
 void	check_leaks(void)
@@ -85,14 +75,16 @@ int main(int argc, char **argv)
     //atexit(check_leaks);
     ft_check_args(argc, &argv[1]);
     if (ft_init_data(argc, &argv[1], &data) == 1)
+    {
         ft_print_usage();
+    }
     ft_init_philos(argc, &data);
     ft_init_mutexes(&data);
     ft_create_philos(&data);
     ft_join_threads(&data);
     ft_destroy_mutexes(&data);
     ft_free_resources(&data);
-    printf("All threads have completed\n");
+    //printf("All threads have completed\n");
     return (0);
 }
 

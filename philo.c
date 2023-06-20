@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/19 11:54:43 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 15:46:35 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void *ft_action(void *each_philo)
     
     philo = (t_philo *)each_philo;
     while(ft_finished_meals(philo) != 1)
+    //while (1)
     {
         if (ft_philo_eats(philo) == 1)
         {
@@ -34,7 +35,6 @@ void *ft_action(void *each_philo)
         }
         ft_philo_thinks(philo);   
     }
-    printf("Philosofo/Thread num: %d is exiting...\n", philo->philo_num);
     return (NULL);
 }
 
@@ -69,10 +69,13 @@ void ft_create_philos(t_data *data)
     while (ft_checker(data) != 1)
     {
         usleep(500);
+        //pthread_mutex_lock(&data->ate_everything_mutex);
         if (data->ate_everything != 0)
         {
-            return;
+            //pthread_mutex_unlock(&data->ate_everything_mutex);
+            return;   
         }
+        //pthread_mutex_unlock(&data->ate_everything_mutex);
     }
     return ;
 }
@@ -85,10 +88,7 @@ void ft_join_threads(t_data *data)
     
     i = 0;
     while(i < data->num_of_philos)
-    {
-        
-        printf("JOIN: philo num: %d thread id: %ld\n", data->philosophers[i].philo_num, (unsigned long)data->philosophers[i].tid);
-        
+    {   
         result = pthread_join(data->philosophers[i].tid, NULL);
         if (result != 0)
         {
@@ -96,6 +96,5 @@ void ft_join_threads(t_data *data)
             exit (1);
         }
         i++;
-    }  
-    
+    }
 }

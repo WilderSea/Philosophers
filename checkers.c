@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/19 12:37:59 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 14:05:27 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void ft_count_meals(t_philo *philo)
 {
     pthread_mutex_lock(&philo->meals_mutex);
     philo->meals++;
-    //printf("philo %d ate: %d times\n", philo->philo_num, philo->meals);
     pthread_mutex_unlock(&philo->meals_mutex);
 }
 
@@ -107,7 +106,6 @@ int ft_finished_meals(t_philo *philo)
         pthread_mutex_lock(&philo->finished_mutex);
         if (philo->meals == philo->generic_data->num_must_eat + 1)
         {
-            //printf("first filo num: %d to ate everything\n", philo->philo_num);
             philo->generic_data->ate_everything = 1;
             pthread_mutex_unlock(&philo->finished_mutex);
             return (1);

@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/19 13:06:09 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/19 15:46:29 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ typedef struct s_data
     int ate_everything;
     t_philo *philosophers;
     pthread_mutex_t *mutexes;
-    long int time_to_die;
-    long int time_to_eat; 
-    long int time_to_sleep;
-    pthread_mutex_t test_mutex;
+    int time_to_die;
+    int time_to_eat; 
+    int time_to_sleep;
+    //pthread_mutex_t ate_everything_mutex;
 }   t_data;
 
 
@@ -89,18 +89,20 @@ void ft_usleep_philo(t_philo *philo, long int waiting_time);
 
 /* Checkers */
 int ft_checker(t_data *data);
-int ft_finished_meals(t_philo *philo);
 int ft_philo_ko(t_philo *philo);
 void ft_set_philos_as_ko(t_data *data);
+int ft_finished_meals(t_philo *philo);
 void ft_count_meals(t_philo *philo);
 void ft_check_args(int argc, char **argus);
-void	check_leaks(void);
-void	ft_print_usage(void);
 void ft_check_digits(unsigned int index, char *argu);
+
+/* Resources */
+void	ft_print_usage(void);
+void ft_free_resources(t_data *data);
+void	check_leaks(void);
 
 /* Utils */
 int         ft_atoi(const char *str);
-//long int	ft_long_atoi(const char *str);
 void	    ft_putstr_fd(char *s, int fd);
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 int	ft_isdigit(int c);
