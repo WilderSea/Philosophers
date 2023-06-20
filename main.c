@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:22 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/19 15:23:12 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/20 09:49:13 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
     ft_join_threads(&data);
     ft_destroy_mutexes(&data);
     ft_free_resources(&data);
-    //printf("All threads have completed\n");
+    printf("All threads have completed\n");
     return (0);
 }
 

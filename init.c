@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/19 15:46:46 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/20 09:49:18 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void ft_destroy_mutexes(t_data *data)
         pthread_mutex_destroy(&data->philosophers[i].philo_ko_mutex);
         pthread_mutex_destroy(&data->philosophers[i].meals_mutex);
         pthread_mutex_destroy(&data->philosophers[i].finished_mutex);
-        //printf("mutexes destroyed\n");
+        printf("mutexes destroyed\n");
         i++;
     }
     //pthread_mutex_destroy(&data->ate_everything_mutex);

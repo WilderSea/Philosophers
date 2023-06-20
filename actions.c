@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:36:41 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/19 14:05:51 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/20 09:43:47 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ int ft_philo_eats(t_philo *philo)
         return (1);
     if (ft_philo_ko(philo) == 1)
         return (1);
-    if (philo->generic_data->num_must_eat > 0)
-        ft_count_meals(philo);
+    /*if (philo->generic_data->num_must_eat > 0)
+        ft_count_meals(philo);*/
     return (0);
 }
 
