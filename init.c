@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/20 09:49:18 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/20 15:02:15 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void ft_init_philos(int argc, t_data *data)
         {
             data->philosophers[i].meals = 0;
         }
+        data->philosophers[i].ate_everything = 0;
         i++;
     }
 }

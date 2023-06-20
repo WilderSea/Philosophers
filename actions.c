@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:36:41 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/20 14:34:25 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/20 15:04:12 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@ int ft_leave_forks(t_philo *philo)
     }
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_right]);
+    // AÑADIR AQUI COMPROBACION DE SI ERA LA ULTIMA COMIDA??
+    if (ft_finished_meals(philo) == 1)
+    {
+        return (1);
+    }
     return (0);
 }
 
@@ -75,17 +80,12 @@ int ft_philo_eats(t_philo *philo)
     philo->last_ate = philo->current_time;
     pthread_mutex_unlock(&philo->current_time_mutex);
     pthread_mutex_unlock(&philo->last_ate_mutex);
+    if (philo->generic_data->num_must_eat > 0)
+        ft_count_meals(philo);
     if (ft_leave_forks(philo) == 1)
         return (1);
     if (ft_philo_ko(philo) == 1)
         return (1);
-    if (philo->generic_data->num_must_eat > 0)
-        ft_count_meals(philo);
-    /* compruebo si justo despues de comer, ya ha comido todo el mundo */
-    if (philo->generic_data->ate_everything == 1)
-    {
-        return (1); /* para que llegue a los join del ft_action */
-    }
     return (0);
 }
 

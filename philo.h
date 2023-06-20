@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/20 14:34:47 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/20 15:03:07 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_philo
     int fork_right;
     int philo_ko;
     int meals;
+    int ate_everything;
     pthread_t tid;
     long int timestamp_in_ms;
     struct timeval start_time;
@@ -91,8 +92,8 @@ void ft_usleep_philo(t_philo *philo, long int waiting_time);
 int ft_checker(t_data *data);
 int ft_philo_ko(t_philo *philo);
 void ft_set_philos_as_ko(t_data *data);
-//int ft_finished_meals(t_philo *philo);
-int ft_finished_meals(t_data *data);
+int ft_finished_meals(t_philo *philo);
+//int ft_finished_meals(t_data *data);
 void ft_count_meals(t_philo *philo);
 void ft_check_args(int argc, char **argus);
 void ft_check_digits(unsigned int index, char *argu);

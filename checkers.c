@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/20 14:31:26 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/20 15:08:46 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int ft_checker(t_data *data)
         pthread_mutex_lock(&data->philosophers[i].last_ate_mutex);
         if (ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].last_ate) >= data->time_to_die)
         {
-            printf(COLOR_BLUE "%ld philo %d has died" COLOR_RESET "\n", ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].start_time), i + 1);
+            //printf(COLOR_BLUE "%ld philo %d has died" COLOR_RESET "\n", ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].start_time), i + 1);
             pthread_mutex_unlock(&data->philosophers[i].last_ate_mutex);
             ft_set_philos_as_ko(data);
             return (1);
@@ -75,6 +75,7 @@ int ft_philo_ko(t_philo *philo)
     pthread_mutex_lock(&philo->philo_ko_mutex);
     if (philo->philo_ko == 1)
     {
+        printf(COLOR_BLUE "%ld philo %d has died" COLOR_RESET "\n", ft_capture_timestamp(philo->current_time, philo->start_time), philo->philo_num);
         pthread_mutex_unlock(&philo->philo_ko_mutex);
         return (1);
     }
@@ -97,28 +98,7 @@ void ft_count_meals(t_philo *philo)
     number of times. If so, set everything as eaten and finish simulation.
 */
 
-
-int ft_finished_meals(t_data *data)
-{
-    int i;
-
-    i = 0;
-    while(i < data->num_of_philos) 
-    {
-        pthread_mutex_lock(&data->philosophers[i].meals_mutex); // este o finish_mutex??
-        if (data->philosophers[i].meals == data->num_must_eat + 1)
-        {
-            data->ate_everything = 1;
-            pthread_mutex_unlock(&data->philosophers[i].meals_mutex);
-            return (1);
-        }
-        pthread_mutex_unlock(&data->philosophers[i].meals_mutex);
-        i++;
-    }
-    return (0);
-}
-
-/*int ft_finished_meals(t_philo *philo)
+int ft_finished_meals(t_philo *philo)
 {
     int i;
 
@@ -128,7 +108,7 @@ int ft_finished_meals(t_data *data)
         pthread_mutex_lock(&philo->finished_mutex);
         if (philo->meals == philo->generic_data->num_must_eat + 1)
         {
-            philo->generic_data->ate_everything = 1;
+            philo->ate_everything = 1;
             pthread_mutex_unlock(&philo->finished_mutex);
             return (1);
         }
@@ -136,4 +116,29 @@ int ft_finished_meals(t_data *data)
         i++;
     }
     return (0);
+}
+
+/*int ft_finished_meals(t_data *data)
+{
+    int i;
+
+    i = 0;
+    while(i < data->num_of_philos) 
+    {
+        //pthread_mutex_lock(&data->philosophers[i].meals_mutex); // este o finish_mutex??
+        pthread_mutex_lock(&data->philosophers[i].finished_mutex);
+        if (data->philosophers[i].meals == data->num_must_eat + 1)
+        {
+            data->ate_everything = 1;
+            //pthread_mutex_unlock(&data->philosophers[i].meals_mutex);
+            pthread_mutex_unlock(&data->philosophers[i].finished_mutex);
+            return (1);
+        }
+        //pthread_mutex_unlock(&data->philosophers[i].meals_mutex);
+        pthread_mutex_unlock(&data->philosophers[i].finished_mutex);
+        i++;
+    }
+    return (0);
 }*/
+
+

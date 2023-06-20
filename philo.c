@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/20 14:32:24 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/20 15:05:40 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,11 @@ void ft_create_philos(t_data *data)
         {
             return ;
         }
-        // num de comidas
-        if (ft_finished_meals(data) == 1) /* han terminado de comer */
-        {
-            return ;
-        }
+        // num de comidas 
+        //if (ft_finished_meals(data) == 1) /* han terminado de comer */
+        //{
+            //return ;
+        //}
     }
     
     return ;
