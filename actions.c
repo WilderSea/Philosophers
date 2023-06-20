@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:36:41 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/20 09:43:47 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/20 14:34:25 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,13 @@ int ft_philo_eats(t_philo *philo)
         return (1);
     if (ft_philo_ko(philo) == 1)
         return (1);
-    /*if (philo->generic_data->num_must_eat > 0)
-        ft_count_meals(philo);*/
+    if (philo->generic_data->num_must_eat > 0)
+        ft_count_meals(philo);
+    /* compruebo si justo despues de comer, ya ha comido todo el mundo */
+    if (philo->generic_data->ate_everything == 1)
+    {
+        return (1); /* para que llegue a los join del ft_action */
+    }
     return (0);
 }
 

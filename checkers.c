@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/19 14:05:27 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/20 14:31:26 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void ft_count_meals(t_philo *philo)
 {
     pthread_mutex_lock(&philo->meals_mutex);
     philo->meals++;
+    printf("philo %d ate %d times\n", philo->philo_num, philo->meals);
     pthread_mutex_unlock(&philo->meals_mutex);
 }
 
@@ -96,7 +97,28 @@ void ft_count_meals(t_philo *philo)
     number of times. If so, set everything as eaten and finish simulation.
 */
 
-int ft_finished_meals(t_philo *philo)
+
+int ft_finished_meals(t_data *data)
+{
+    int i;
+
+    i = 0;
+    while(i < data->num_of_philos) 
+    {
+        pthread_mutex_lock(&data->philosophers[i].meals_mutex); // este o finish_mutex??
+        if (data->philosophers[i].meals == data->num_must_eat + 1)
+        {
+            data->ate_everything = 1;
+            pthread_mutex_unlock(&data->philosophers[i].meals_mutex);
+            return (1);
+        }
+        pthread_mutex_unlock(&data->philosophers[i].meals_mutex);
+        i++;
+    }
+    return (0);
+}
+
+/*int ft_finished_meals(t_philo *philo)
 {
     int i;
 
@@ -114,6 +136,4 @@ int ft_finished_meals(t_philo *philo)
         i++;
     }
     return (0);
-}
-
-
+}*/
