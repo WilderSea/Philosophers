@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/21 10:55:07 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 11:34:04 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,12 @@ void ft_create_philos(t_data *data)
     while (1)
     {
         usleep(500);
-        // num de comidas 
-        //if (ft_finished_meals(data) == 1) /* han terminado de comer */
-        //{
-            //return ;
-        //}
+        // CHECK if ALL philos ate at least enough.
+        if (ft_check_meals(data) == 1)
+        {
+            printf("entre aqui, all philos ate everythibng\n");
+            return ;
+        }
         /* CHECK if any philo is KO. */
         if (ft_check_ko(data) == 1)
         {
