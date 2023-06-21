@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/21 13:53:25 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 14:20:56 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,11 @@ typedef struct s_data
     int num_of_philos;
     int num_of_forks;
     int num_must_eat;
-    int ate_everything;
     t_philo *philosophers;
     pthread_mutex_t *mutexes;
     int time_to_die;
     int time_to_eat; 
     int time_to_sleep;
-    pthread_mutex_t ate_everything_mutex;
     pthread_mutex_t count_mutex;
 }   t_data;
 

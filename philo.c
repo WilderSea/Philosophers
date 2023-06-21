@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/21 13:16:19 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 14:36:23 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,8 @@ void *ft_action(void *each_philo)
 
 /* 
     Function to create threads, one per philosopher. This function as a main 
-    thread will continue executing an infinite loop that will run while all 
-    philos are alive and until they still have to eat. Important to check 
-    about the food along with the ko, to stop simulation after eating enough, 
-    avoiding unwanted ko's.
+    thread will continue executing an infinite loop that will check if philos 
+    are still alive or they still have to eat.
 */
 
 void ft_create_philos(t_data *data)
@@ -68,13 +66,11 @@ void ft_create_philos(t_data *data)
     while (1)
     {
         usleep(500);
-        // CHECK if ALL philos ate at least enough.
         if (ft_check_meals(data) == 1)
         {
             printf("entre aqui, all philos ate everythibng\n");
             return ;
         }
-        /* CHECK if any philo is KO. */
         if (ft_check_ko(data) == 1)
         {
             return ;

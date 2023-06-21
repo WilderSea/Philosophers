@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/21 13:53:47 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 14:41:50 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int ft_check_ko(t_data *data)
         pthread_mutex_lock(&data->philosophers[i].last_ate_mutex);
         if (ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].last_ate) >= data->time_to_die)
         {
-            printf(COLOR_BLUE "%ld philo %d has died" COLOR_RESET "\n", ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].start_time), i + 1);
+            printf(COLOR_BLUE "%ld philo %d died" COLOR_RESET "\n", ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].start_time), i + 1);
             pthread_mutex_unlock(&data->philosophers[i].last_ate_mutex);
             ft_set_philos_as_ko(data);
             return (1);
@@ -73,34 +73,14 @@ int ft_check_ko(t_data *data)
 int ft_is_philo_ko(t_philo *philo)
 {
     pthread_mutex_lock(&philo->philo_ko_mutex);
-    //pthread_mutex_lock(&philo->ate_everything_mutex);
-    //if (philo->philo_ko == 1 || philo->ate_everything == 1)
     if (philo->philo_ko == 1)
     {
-        //printf(COLOR_BLUE "%ld philo %d has died" COLOR_RESET "\n", ft_capture_timestamp(philo->current_time, philo->start_time), philo->philo_num);
         pthread_mutex_unlock(&philo->philo_ko_mutex);
-        //pthread_mutex_unlock(&philo->ate_everything_mutex);
         return (1);
     }
     pthread_mutex_unlock(&philo->philo_ko_mutex);
-    //pthread_mutex_unlock(&philo->ate_everything_mutex);
     return (0);
 }
-
-
-/////
-/////
-/////
-/////
-/////
-/////
-/////
-/////
-/////
-/////
-///// MEALLLLLSSSSS
-
-
 
 
 /* Add one meal to a philosopher */
@@ -146,36 +126,8 @@ int ft_check_meals(t_data *data)
     if (count == data->num_of_philos)
     {
         pthread_mutex_unlock(&data->count_mutex);
-        pthread_mutex_lock(&data->ate_everything_mutex);
-        data->ate_everything = 1; // para recibir esta señal y parar simulacion
-        pthread_mutex_unlock(&data->ate_everything_mutex);
         return (1);
     }
     pthread_mutex_unlock(&data->count_mutex);
     return (0);
 }
-
-/*void ft_philos_ate_everything(t_data *data)
-{
-    int i;
-
-    i = 0;
-    while (i < data->num_of_philos)
-    {
-        pthread_mutex_lock(&data->philosophers[i].ate_everything_mutex);
-        data->philosophers[i].ate_everything = 1;
-        printf("han comido todos y yo soy el %d\n", data->philosophers[i].philo_num);
-        pthread_mutex_unlock(&data->philosophers[i].ate_everything_mutex);
-        i++;
-    }
-}*/
-
-/*int ft_philo_finished(t_philo *philo)
-{
-    pthread_mutex_lock(&philo->ate_everything_mutex);
-    if (philo->ate_everything == 1)
-        pthread_mutex_unlock(&philo->ate_everything_mutex);
-        return (1);
-    pthread_mutex_unlock(&philo->ate_everything_mutex);
-    return (0);
-}*/
