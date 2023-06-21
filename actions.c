@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:36:41 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/20 15:04:12 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 10:59:22 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 int ft_get_forks(t_philo *philo)
 {
     pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_left]));
-    if (ft_philo_ko(philo) == 1)
+    if (ft_is_philo_ko(philo) == 1)
     {
         pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
         return (1);
     }
     pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_right]));
-    if (ft_philo_ko(philo) == 1)
+    if (ft_is_philo_ko(philo) == 1)
     {
         pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
         pthread_mutex_unlock(&(philo->generic_data->mutexes[philo->fork_right]));
@@ -32,7 +32,7 @@ int ft_get_forks(t_philo *philo)
 
 int ft_leave_forks(t_philo *philo)
 {
-    if (ft_philo_ko(philo) == 1)
+    if (ft_is_philo_ko(philo) == 1)
     {
         pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
         pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_right]);
@@ -41,10 +41,10 @@ int ft_leave_forks(t_philo *philo)
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_right]);
     // AÑADIR AQUI COMPROBACION DE SI ERA LA ULTIMA COMIDA??
-    if (ft_finished_meals(philo) == 1)
+    /*if (ft_finished_meals(philo) == 1)
     {
         return (1);
-    }
+    }*/
     return (0);
 }
 
@@ -59,7 +59,7 @@ int ft_philo_sleeps(t_philo *philo)
     ft_right_now(philo);
     printf(COLOR_RED "%ld philo %d is sleeping" COLOR_RESET "\n", philo->timestamp_in_ms, philo->philo_num);
     ft_usleep_philo(philo, philo->generic_data->time_to_sleep);
-    if (ft_philo_ko(philo) == 1)
+    if (ft_is_philo_ko(philo) == 1)
         return (1);
     return (0);
 }
@@ -84,7 +84,7 @@ int ft_philo_eats(t_philo *philo)
         ft_count_meals(philo);
     if (ft_leave_forks(philo) == 1)
         return (1);
-    if (ft_philo_ko(philo) == 1)
+    if (ft_is_philo_ko(philo) == 1)
         return (1);
     return (0);
 }

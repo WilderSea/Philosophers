@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 11:22:20 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/19 10:49:36 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 10:54:16 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void ft_usleep_philo(t_philo *philo, long int waiting_time)
     {
         gettimeofday(&philo->current_time, NULL);
         now = ft_capture_timestamp(philo->current_time, philo->start_time);
-        if (ft_philo_ko(philo) == 1)
+        if (ft_is_philo_ko(philo) == 1)
         {
             pthread_mutex_unlock(&philo->current_time_mutex);
             break;   

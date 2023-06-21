@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/20 15:02:15 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 10:49:23 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int ft_init_data(int argc, char **argus, t_data *data)
     if (argc == 6)
     {
         data->num_must_eat = ft_atoi(argus[4]);
-        data->ate_everything = 0;
+        //data->ate_everything = 0;
         if (data->num_must_eat <= 0)
             return (1);
     }

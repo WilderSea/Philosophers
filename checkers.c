@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/20 15:08:46 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 10:58:17 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ void ft_set_philos_as_ko(t_data *data)
 Function to check time left for each philosopher and decide if it is KO.
 It checks the values stored in each philo struct. If the difference between "now"
 and the moment the philo "eat last time" is greater than the "time to die", set
-the philo as KO.
+the philo as KO. Print KO here, just for the first philo found.
 */
 
-int ft_checker(t_data *data)
+int ft_check_ko(t_data *data)
 {
     int i;
 
@@ -52,7 +52,7 @@ int ft_checker(t_data *data)
         pthread_mutex_lock(&data->philosophers[i].last_ate_mutex);
         if (ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].last_ate) >= data->time_to_die)
         {
-            //printf(COLOR_BLUE "%ld philo %d has died" COLOR_RESET "\n", ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].start_time), i + 1);
+            printf(COLOR_BLUE "%ld philo %d has died" COLOR_RESET "\n", ft_capture_timestamp(data->philosophers[i].current_time, data->philosophers[i].start_time), i + 1);
             pthread_mutex_unlock(&data->philosophers[i].last_ate_mutex);
             ft_set_philos_as_ko(data);
             return (1);
@@ -70,12 +70,12 @@ int ft_checker(t_data *data)
     Function that checks if a philo has been set as ko.
 */
 
-int ft_philo_ko(t_philo *philo)
+int ft_is_philo_ko(t_philo *philo)
 {
     pthread_mutex_lock(&philo->philo_ko_mutex);
     if (philo->philo_ko == 1)
     {
-        printf(COLOR_BLUE "%ld philo %d has died" COLOR_RESET "\n", ft_capture_timestamp(philo->current_time, philo->start_time), philo->philo_num);
+        //printf(COLOR_BLUE "%ld philo %d has died" COLOR_RESET "\n", ft_capture_timestamp(philo->current_time, philo->start_time), philo->philo_num);
         pthread_mutex_unlock(&philo->philo_ko_mutex);
         return (1);
     }

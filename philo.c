@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/20 15:05:40 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 10:55:07 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void *ft_action(void *each_philo)
     t_philo *philo;
     
     philo = (t_philo *)each_philo;
-    //while(ft_finished_meals(philo) != 1)
     while (1)
     {
         if (ft_philo_eats(philo) == 1)
@@ -66,24 +65,19 @@ void ft_create_philos(t_data *data)
         }
         i++;   
     }
-    // aqui comprobar si la simulacion debe seguir o no
-    // ko's y num de comidas
-    //while (ft_checker(data) != 1 && ft_finished_meals(data) != 1)
-    //while (ft_checker(data) != 1 || ft_finished_meals(data) != 1)
     while (1)
     {
         usleep(500);
-        if (ft_checker(data) == 1) // el checker cuando encuentra un philo que debe poner a ko
-        // directamente pone todos a ko con "set philos as ko" y entraran en el join porque 
-        // llegan a los return NULL del ft_action
-        {
-            return ;
-        }
         // num de comidas 
         //if (ft_finished_meals(data) == 1) /* han terminado de comer */
         //{
             //return ;
         //}
+        /* CHECK if any philo is KO. */
+        if (ft_check_ko(data) == 1)
+        {
+            return ;
+        }
     }
     
     return ;

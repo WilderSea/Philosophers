@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/20 15:03:07 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 10:58:34 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,10 @@ void ft_right_now(t_philo *philo);
 void ft_usleep_philo(t_philo *philo, long int waiting_time);
 
 /* Checkers */
-int ft_checker(t_data *data);
-int ft_philo_ko(t_philo *philo);
+int ft_check_ko(t_data *data);
+int ft_is_philo_ko(t_philo *philo);
 void ft_set_philos_as_ko(t_data *data);
+
 int ft_finished_meals(t_philo *philo);
 //int ft_finished_meals(t_data *data);
 void ft_count_meals(t_philo *philo);
