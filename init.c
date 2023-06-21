@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/21 10:49:23 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 13:43:09 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int ft_init_data(int argc, char **argus, t_data *data)
     if (argc == 6)
     {
         data->num_must_eat = ft_atoi(argus[4]);
-        //data->ate_everything = 0;
+        data->ate_everything = 0;
         if (data->num_must_eat <= 0)
             return (1);
     }
@@ -87,10 +87,12 @@ void ft_init_mutexes(t_data *data)
         pthread_mutex_init(&data->philosophers[i].last_ate_mutex, NULL);
         pthread_mutex_init(&data->philosophers[i].philo_ko_mutex, NULL);
         pthread_mutex_init(&data->philosophers[i].meals_mutex, NULL);
-        pthread_mutex_init(&data->philosophers[i].finished_mutex, NULL);
+        //pthread_mutex_init(&data->philosophers[i].finished_mutex, NULL);
+        //pthread_mutex_init(&data->philosophers[i].ate_everything_mutex, NULL);
         i++;   
     }
-    //pthread_mutex_init(&data->ate_everything_mutex, NULL);
+    pthread_mutex_init(&data->ate_everything_mutex, NULL);
+    pthread_mutex_init(&data->count_mutex, NULL);
 }
 
 /* Destroy mutexes */
@@ -107,11 +109,13 @@ void ft_destroy_mutexes(t_data *data)
         pthread_mutex_destroy(&data->philosophers[i].last_ate_mutex);
         pthread_mutex_destroy(&data->philosophers[i].philo_ko_mutex);
         pthread_mutex_destroy(&data->philosophers[i].meals_mutex);
-        pthread_mutex_destroy(&data->philosophers[i].finished_mutex);
+        //pthread_mutex_destroy(&data->philosophers[i].finished_mutex);
+        //pthread_mutex_destroy(&data->philosophers[i].ate_everything_mutex);
         printf("mutexes destroyed\n");
         i++;
     }
-    //pthread_mutex_destroy(&data->ate_everything_mutex);
+    pthread_mutex_destroy(&data->ate_everything_mutex);
+    pthread_mutex_destroy(&data->count_mutex);
 }
 
 /* 

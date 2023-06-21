@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/21 11:54:49 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 13:44:10 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,17 @@ int ft_check_ko(t_data *data)
 int ft_is_philo_ko(t_philo *philo)
 {
     pthread_mutex_lock(&philo->philo_ko_mutex);
+    //pthread_mutex_lock(&philo->ate_everything_mutex);
+    //if (philo->philo_ko == 1 || philo->ate_everything == 1)
     if (philo->philo_ko == 1)
     {
         //printf(COLOR_BLUE "%ld philo %d has died" COLOR_RESET "\n", ft_capture_timestamp(philo->current_time, philo->start_time), philo->philo_num);
         pthread_mutex_unlock(&philo->philo_ko_mutex);
+        //pthread_mutex_unlock(&philo->ate_everything_mutex);
         return (1);
     }
     pthread_mutex_unlock(&philo->philo_ko_mutex);
+    //pthread_mutex_unlock(&philo->ate_everything_mutex);
     return (0);
 }
 
@@ -111,47 +115,64 @@ void ft_count_meals(t_philo *philo)
 
 /*
     Function to check if all philosophers ate at least the required
-    number of times. If so, set everything as eaten and finish simulation.
+    number of times. If so, set every philo as "ate everything" and 
+    finish simulation.
 */
 
 int ft_check_meals(t_data *data)
 {
     int i;
-
+    int count;
+    
     i = 0;
+    count = 0;
     while(i < data->num_of_philos) 
     {
-        //pthread_mutex_lock(&philo->finished_mutex);
         pthread_mutex_lock(&data->philosophers[i].meals_mutex);
         if (data->philosophers[i].meals >= data->num_must_eat)
         {
-            //data->philosophers[i].ate_everything = 1;
-            // poner todos los philos a ate_everything = 1
             pthread_mutex_unlock(&data->philosophers[i].meals_mutex);
-            ft_philos_ate_everything(data);
-            // detach threads
-            //pthread_mutex_unlock(&philo->finished_mutex);
-            return (1);
+            pthread_mutex_lock(&data->count_mutex);
+            count++;
+            pthread_mutex_unlock(&data->count_mutex);
         }
-        //pthread_mutex_unlock(&philo->finished_mutex);
         pthread_mutex_unlock(&data->philosophers[i].meals_mutex);
         i++;
     }
+    pthread_mutex_lock(&data->count_mutex);
+    if (count == data->num_of_philos)
+    {
+        pthread_mutex_unlock(&data->count_mutex);
+        pthread_mutex_lock(&data->ate_everything_mutex);
+        data->ate_everything = 1; // para recibir esta señal y parar simulacion
+        pthread_mutex_unlock(&data->ate_everything_mutex);
+        return (1);
+    }
+    pthread_mutex_unlock(&data->count_mutex);
     return (0);
 }
 
-void ft_philos_ate_everything(t_data *data)
+/*void ft_philos_ate_everything(t_data *data)
 {
     int i;
 
     i = 0;
     while (i < data->num_of_philos)
     {
-        pthread_mutex_lock(&data->philosophers[i].finished_mutex);
+        pthread_mutex_lock(&data->philosophers[i].ate_everything_mutex);
         data->philosophers[i].ate_everything = 1;
-        pthread_mutex_unlock(&data->philosophers[i].finished_mutex);
+        printf("han comido todos y yo soy el %d\n", data->philosophers[i].philo_num);
+        pthread_mutex_unlock(&data->philosophers[i].ate_everything_mutex);
         i++;
     }
-}
+}*/
 
-
+/*int ft_philo_finished(t_philo *philo)
+{
+    pthread_mutex_lock(&philo->ate_everything_mutex);
+    if (philo->ate_everything == 1)
+        pthread_mutex_unlock(&philo->ate_everything_mutex);
+        return (1);
+    pthread_mutex_unlock(&philo->ate_everything_mutex);
+    return (0);
+}*/

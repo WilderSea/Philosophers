@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:36:41 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/21 11:37:49 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 13:45:47 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,14 @@ int ft_leave_forks(t_philo *philo)
     {
         pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
         pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_right]);
+        printf("%ld philo %d has left left fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_left);
+        printf("%ld philo %d has left right fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_right);
         return (1);
     }
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_left]);
     pthread_mutex_unlock(&philo->generic_data->mutexes[philo->fork_right]);
-    // AÑADIR AQUI COMPROBACION DE SI ERA LA ULTIMA COMIDA??
-    /*if (ft_finished_meals(philo) == 1)
-    {
-        return (1);
-    }*/
+    printf("%ld philo %d has left left fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_left);
+    printf("%ld philo %d has left right fork %d\n", philo->timestamp_in_ms, philo->philo_num, philo->fork_right);
     return (0);
 }
 
@@ -82,12 +81,15 @@ int ft_philo_eats(t_philo *philo)
     pthread_mutex_unlock(&philo->last_ate_mutex);
     if (philo->generic_data->num_must_eat > 0)
         ft_count_meals(philo);
-    /*if (philo->ate_everything == 1)
-    {
-        return (1);
-    }*/
     if (ft_leave_forks(philo) == 1)
         return (1);
+    pthread_mutex_lock(&philo->generic_data->ate_everything_mutex);
+    if (philo->generic_data->ate_everything == 1)
+    {
+        pthread_mutex_unlock(&philo->generic_data->ate_everything_mutex);
+        return (1);
+    }
+    pthread_mutex_unlock(&philo->generic_data->ate_everything_mutex);
     if (ft_is_philo_ko(philo) == 1)
         return (1);
     return (0);

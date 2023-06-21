@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/21 11:34:04 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 13:16:19 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void ft_join_threads(t_data *data)
     i = 0;
     while(i < data->num_of_philos)
     {   
+        printf("join thread philo %d\n", data->philosophers[i].philo_num);
         result = pthread_join(data->philosophers[i].tid, NULL);
         if (result != 0)
         {

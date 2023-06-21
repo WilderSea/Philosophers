@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/21 11:36:24 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 13:42:32 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_philo
     pthread_mutex_t last_ate_mutex;
     pthread_mutex_t philo_ko_mutex;
     pthread_mutex_t meals_mutex;
+    pthread_mutex_t ate_everything_mutex;
     pthread_mutex_t finished_mutex;
     struct s_data *generic_data;
 }   t_philo;
@@ -60,13 +61,14 @@ typedef struct s_data
     int num_of_philos;
     int num_of_forks;
     int num_must_eat;
-    //int ate_everything;
+    int ate_everything;
     t_philo *philosophers;
     pthread_mutex_t *mutexes;
     int time_to_die;
     int time_to_eat; 
     int time_to_sleep;
-    //pthread_mutex_t ate_everything_mutex;
+    pthread_mutex_t ate_everything_mutex;
+    pthread_mutex_t count_mutex;
 }   t_data;
 
 
@@ -96,6 +98,7 @@ void ft_set_philos_as_ko(t_data *data);
 void ft_count_meals(t_philo *philo);
 int ft_check_meals(t_data *data);
 void ft_philos_ate_everything(t_data *data);
+int ft_philo_finished(t_philo *philo);
 
 void ft_check_args(int argc, char **argus);
 void ft_check_digits(unsigned int index, char *argu);
