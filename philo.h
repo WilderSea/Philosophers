@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/21 13:42:32 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 13:53:25 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct s_philo
     int fork_right;
     int philo_ko;
     int meals;
-    int ate_everything;
+    int finished;
     pthread_t tid;
     long int timestamp_in_ms;
     struct timeval start_time;

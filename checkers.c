@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/21 13:44:10 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 13:53:47 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,9 @@ int ft_check_meals(t_data *data)
         if (data->philosophers[i].meals >= data->num_must_eat)
         {
             pthread_mutex_unlock(&data->philosophers[i].meals_mutex);
+            pthread_mutex_lock(&data->philosophers[i].finished_mutex);
+            data->philosophers[i].finished = 1;
+            pthread_mutex_unlock(&data->philosophers[i].finished_mutex);
             pthread_mutex_lock(&data->count_mutex);
             count++;
             pthread_mutex_unlock(&data->count_mutex);
