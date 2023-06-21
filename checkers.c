@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/21 14:41:50 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/21 14:52:05 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ void ft_set_philos_as_ko(t_data *data)
     }
 }
 /* 
-Function to check time left for each philosopher and decide if it is KO.
-It checks the values stored in each philo struct. If the difference between "now"
-and the moment the philo "eat last time" is greater than the "time to die", set
-the philo as KO. Print KO here, just for the first philo found.
+    Function to check time left for each philosopher and decide if it is KO.
+    It checks the values stored in each philo struct. If the difference between "now"
+    and the moment the philo "eat last time" is greater than the "time to die", 
+    print KO and set all the other philos as KO as well.
 */
 
 int ft_check_ko(t_data *data)
@@ -89,7 +89,6 @@ void ft_count_meals(t_philo *philo)
 {
     pthread_mutex_lock(&philo->meals_mutex);
     philo->meals++;
-    printf("philo %d ate %d times\n", philo->philo_num, philo->meals);
     pthread_mutex_unlock(&philo->meals_mutex);
 }
 
