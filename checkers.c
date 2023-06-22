@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/21 14:52:05 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/22 12:19:57 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,15 @@ int ft_check_meals(t_data *data)
         pthread_mutex_unlock(&data->philosophers[i].meals_mutex);
         i++;
     }
+    if (ft_everyphilo_ate(data, count) == 1)
+        return (1);
+    return (0);
+}
+
+int ft_everyphilo_ate(t_data *data, int total)
+{
     pthread_mutex_lock(&data->count_mutex);
-    if (count == data->num_of_philos)
+    if (total == data->num_of_philos)
     {
         pthread_mutex_unlock(&data->count_mutex);
         return (1);

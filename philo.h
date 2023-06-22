@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/21 15:01:38 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/06/22 12:15:05 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void ft_set_philos_as_ko(t_data *data);
 
 void ft_count_meals(t_philo *philo);
 int ft_check_meals(t_data *data);
+int ft_everyphilo_ate(t_data *data, int total);
 
 void ft_check_args(int argc, char **argus);
 void ft_check_digits(unsigned int index, char *argu);
