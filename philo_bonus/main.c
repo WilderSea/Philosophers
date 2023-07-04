@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/26 11:34:31 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/28 11:04:05 by msintas-         ###   ########.fr       */
+/*   Created: 2023/04/14 17:02:22 by msintas-          #+#    #+#             */
+/*   Updated: 2023/06/22 13:32:51 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
+#include "philo.h"
 
 void	ft_print_usage(void)
 {
@@ -78,11 +78,10 @@ int	main(int argc, char **argv)
 		ft_print_usage();
 	}
 	ft_init_philos(argc, &data);
-	ft_init_mutexes(&data);
+	ft_init_semaphores(&data);
 	ft_create_philos(&data);
-	//ft_print_array(&data);
-	ft_join_threads(&data);
-	ft_destroy_mutexes(&data);
+	ft_waitpid_processes(&data);
+	ft_close_semaphores(&data);
 	ft_free_resources(&data);
 	return (0);
 }
