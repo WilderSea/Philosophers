@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/26 11:36:11 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/26 16:07:13 by msintas-         ###   ########.fr       */
+/*   Created: 2023/05/04 11:24:37 by msintas-          #+#    #+#             */
+/*   Updated: 2023/06/22 18:45:07 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
+#include "philo.h"
 
 int	ft_isdigit(int c)
 {

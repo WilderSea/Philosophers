@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_bonus.h                                      :+:      :+:    :+:   */
+/*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/26 11:32:02 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/26 17:56:29 by msintas-         ###   ########.fr       */
+/*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
+/*   Updated: 2023/07/05 16:39:40 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_BONUS_H
-# define PHILO_BONUS_H
+#ifndef PHILO_H
+# define PHILO_H
 
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <pthread.h>
+# include <semaphore.h>
+# include <fcntl.h>
+# include <sys/wait.h> // 'waitpid'
+# include <sys/types.h> // 'pid_t'
 # include <sys/time.h>
+# include <signal.h> // 'kill'
 
 # define COLOR_RED     "\x1b[31m"
 # define COLOR_GREEN   "\x1b[32m"
@@ -39,17 +44,23 @@ typedef struct s_philo
 	int					philo_ko;
 	int					meals;
 	int					finished;
-	//pthread_t			tid;
+	pthread_t			tid;
 	pid_t				pid;
 	long int			timestamp_in_ms;
 	struct timeval		start_time;
 	struct timeval		current_time;
 	struct timeval		last_ate;
-	pthread_mutex_t		current_time_mutex;
-	pthread_mutex_t		last_ate_mutex;
-	pthread_mutex_t		philo_ko_mutex;
-	pthread_mutex_t		meals_mutex;
-	pthread_mutex_t		finished_mutex;
+	// porque son punteros? podrian no serlo
+	sem_t				*current_time_sem; 
+	sem_t				*last_ate_sem;
+	sem_t				*philo_ko_sem;
+	sem_t				*meals_sem;
+	sem_t				*finished_sem;
+	/*sem_t				current_time_sem; 
+	sem_t				last_ate_sem;
+	sem_t				philo_ko_sem;
+	sem_t				meals_sem;
+	sem_t				finished_sem;*/
 	struct s_data		*generic_data;
 }	t_philo;
 
@@ -61,25 +72,22 @@ typedef struct s_data
 	int				num_of_forks;
 	int				num_must_eat;
 	t_philo			*philosophers;
-	pthread_mutex_t	*mutexes;
+	sem_t			*forks_sem;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
-	pthread_mutex_t	count_mutex;
-	//
-	//int forkings;
+	sem_t			*count_sem;
+	//sem_t			count_sem;
 }	t_data;
 
 /* Main functions */
 
 int			ft_init_data(int argc, char **argus, t_data *data);
 void		ft_init_philos(int argc, t_data *data);
-void		ft_init_mutexes(t_data *data);
+void		ft_init_semaphores(t_data *data);
 void		ft_create_philos(t_data *data);
-void		ft_join_threads(t_data *data);
-void		ft_destroy_mutexes(t_data *data);
-
-
+void		ft_waitpid_processes(t_data *data);
+void		ft_close_semaphores(t_data *data);
 
 /* Actions */
 
@@ -106,7 +114,6 @@ void		ft_check_digits(unsigned int index, char *argu);
 
 /* Resources */
 
-void ft_print_array(t_data *data);
 void		ft_print_forks(t_philo *philo);
 void		ft_print_usage(void);
 void		ft_free_resources(t_data *data);

@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/26 11:35:04 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/26 16:58:00 by msintas-         ###   ########.fr       */
+/*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
+/*   Updated: 2023/06/22 13:13:33 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
+#include "philo.h"
 
 /*
     Initialize generic data for the program. 
@@ -21,12 +21,11 @@ int	ft_init_data(int argc, char **argus, t_data *data)
 {
 	data->num_of_philos = ft_atoi(argus[0]);
 	data->num_of_forks = data->num_of_philos;
-	//data->philosophers = malloc(sizeof(t_philo) * data->num_of_philos);
 	data->philosophers = malloc(sizeof(t_philo) * data->num_of_philos);
 	if (data->philosophers == NULL)
 		return (1);
-	data->mutexes = malloc(sizeof(pthread_mutex_t) * (data->num_of_philos));
-	if (data->mutexes == NULL)
+	data->forks_sem = malloc(sizeof(sem_t) * (data->num_of_philos));
+	if (data->forks_sem == NULL)
 		return (1);
 	data->time_to_die = ft_atoi(argus[1]);
 	data->time_to_eat = ft_atoi(argus[2]);
@@ -40,9 +39,6 @@ int	ft_init_data(int argc, char **argus, t_data *data)
 	if (data->num_of_philos < 1 || data->time_to_die < 1 \
 			|| data->time_to_eat < 1 || data->time_to_sleep < 1)
 		return (1);
-	//data->forkings = 2 ** data->num_of_philos;
-	//data->forkings = ft_calc_forks(2, data->num_of_philos);
-	//printf("si el num de filos es: %d yo forking %d times\n", data->num_of_philos, data->forkings);
 	return (0);
 }
 
@@ -75,44 +71,75 @@ void	ft_init_philos(int argc, t_data *data)
 	}
 }
 
-/* Initialize all mutexes */
+/* 
+Create all semaphores. Init their values to 1, so first process with sem_wait() 
+will decrease to 0 the semaphore value and all other processes may wait for a sem_post()
+*/
 
-void	ft_init_mutexes(t_data *data)
+void	ft_init_semaphores(t_data *data)
 {
 	int	i;
 
 	i = 0;
 	while (i < data->num_of_philos)
 	{
-		pthread_mutex_init(&data->mutexes[i], NULL);
+		/*pthread_mutex_init(&data->mutexes[i], NULL);
 		pthread_mutex_init(&data->philosophers[i].current_time_mutex, NULL);
 		pthread_mutex_init(&data->philosophers[i].last_ate_mutex, NULL);
 		pthread_mutex_init(&data->philosophers[i].philo_ko_mutex, NULL);
 		pthread_mutex_init(&data->philosophers[i].meals_mutex, NULL);
-		pthread_mutex_init(&data->philosophers[i].finished_mutex, NULL);
+		pthread_mutex_init(&data->philosophers[i].finished_mutex, NULL);*/
+		sem_unlink("/forks_sem"); // este va a dar fallo ??
+		sem_unlink("/current_time_sem");
+		sem_unlink("/last_ate_sem");
+		sem_unlink("/philo_ko_sem");
+		sem_unlink("/meals_sem");
+		sem_unlink("/finished_sem");
+		data->forks_sem = sem_open("/forks_sem", O_CREAT, 0666, 1);
+		data->philosophers[i].current_time_sem = sem_open("/current_time_sem", O_CREAT, 0666, 1);
+		data->philosophers[i].last_ate_sem = sem_open("/last_ate_sem", O_CREAT, 0666, 1);
+		data->philosophers[i].philo_ko_sem = sem_open("/philo_ko_sem", O_CREAT, 0666, 1);
+		data->philosophers[i].meals_sem = sem_open("/meals_sem", O_CREAT, 0666, 1);
+		data->philosophers[i].finished_sem = sem_open("/finished_sem", O_CREAT, 0666, 1);
 		i++;
 	}
-	pthread_mutex_init(&data->count_mutex, NULL);
+	//pthread_mutex_init(&data->count_mutex, NULL);
+	sem_unlink("/count_sem");
+	data->count_sem = sem_open("/count_sem", O_CREAT, 0666, 1);
 }
 
 /* Destroy mutexes */
 
-void	ft_destroy_mutexes(t_data *data)
+void	ft_close_semaphores(t_data *data)
 {
 	int	i;
 
 	i = 0;
 	while (i < data->num_of_philos)
 	{
-		pthread_mutex_destroy(&data->mutexes[i]);
+		/*pthread_mutex_destroy(&data->mutexes[i]);
 		pthread_mutex_destroy(&data->philosophers[i].current_time_mutex);
 		pthread_mutex_destroy(&data->philosophers[i].last_ate_mutex);
 		pthread_mutex_destroy(&data->philosophers[i].philo_ko_mutex);
 		pthread_mutex_destroy(&data->philosophers[i].meals_mutex);
-		pthread_mutex_destroy(&data->philosophers[i].finished_mutex);
+		pthread_mutex_destroy(&data->philosophers[i].finished_mutex);*/
+		sem_close(data->forks_sem);
+		sem_close(data->philosophers[i].current_time_sem);
+		sem_close(data->philosophers[i].last_ate_sem);
+		sem_close(data->philosophers[i].philo_ko_sem);
+		sem_close(data->philosophers[i].meals_sem);
+		sem_close(data->philosophers[i].finished_sem);
+		sem_unlink("/forks_sem");
+		sem_unlink("/current_time_sem");
+		sem_unlink("/last_ate_sem");
+		sem_unlink("/philo_ko_sem");
+		sem_unlink("/meals_sem");
+		sem_unlink("/finished_sem");
 		i++;
 	}
-	pthread_mutex_destroy(&data->count_mutex);
+	//pthread_mutex_destroy(&data->count_mutex);
+	sem_close(data->count_sem);
+	sem_unlink("/count_sem");
 }
 
 /* 
@@ -122,5 +149,5 @@ Free memory to avoid leaks
 void	ft_free_resources(t_data *data)
 {
 	free(data->philosophers);
-	free(data->mutexes);
+	free(data->forks_sem);
 }
