@@ -6,11 +6,16 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
+<<<<<<< HEAD:philo_bonus/philo.c
 /*   Updated: 2023/07/05 17:11:26 by msintas-         ###   ########.fr       */
+=======
+/*   Updated: 2023/06/22 13:44:47 by msintas-         ###   ########.fr       */
+>>>>>>> 3711f31e2b2056ca8cf9fa1d12426be2173040ad:philo_bonus/philo_bonus.c
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+<<<<<<< HEAD:philo_bonus/philo.c
 
 /*void *ft_supervisor(void *thread_info)
 {
@@ -21,13 +26,15 @@
 	data = philo->generic_data;
 	
 }*/
+=======
+>>>>>>> 3711f31e2b2056ca8cf9fa1d12426be2173040ad:philo_bonus/philo_bonus.c
 
 /* 
     Every thread will execute this routine. Infinite loop will end only when
     a philo is ko (actions return 1).
 */
 
-void	*ft_action(void *each_philo)
+void	*ft_action(void *each_philo) // no se si este prototipo puede quedar asi
 {
 	t_philo	*philo;
 	//int result;
@@ -101,16 +108,21 @@ void	ft_create_philos(t_data *data)
 	return ;
 }
 
+<<<<<<< HEAD:philo_bonus/philo.c
 /* 
 Function to wait for the termination of any child process (-1) in a parent process.
 Waitpid--> -1 indicates parent waits for ANY child process to terminate)
 			Status: when value is 0 indicates child process terminated succesfully.
 
 */
+=======
+/* Joining threads. On success, pthread_join returns 0 */
+>>>>>>> 3711f31e2b2056ca8cf9fa1d12426be2173040ad:philo_bonus/philo_bonus.c
 
 void	ft_waitpid_processes(t_data *data)
 {
 	int	i;
+<<<<<<< HEAD:philo_bonus/philo.c
 	int	status;
 
 	i = 0;
@@ -130,6 +142,19 @@ void	ft_waitpid_processes(t_data *data)
 				// break ..... con kill terminamos todos los procesos? o solo 1
 				i++;
 			}
+=======
+	int	result;
+
+	i = 0; // -1 ??
+	while (i < data->num_of_philos)
+	{
+		waitpid(data->philosophers[i].pid, &result, 0);
+		//result = pthread_join(data->philosophers[i].tid, NULL);
+		if (result != 0) // aqui hace cosas distintas con kill y sigterm
+		{
+			ft_putstr_fd("Failed to join the thread.\n", 2);
+			exit (1);
+>>>>>>> 3711f31e2b2056ca8cf9fa1d12426be2173040ad:philo_bonus/philo_bonus.c
 		}
 		i++;
 	}
