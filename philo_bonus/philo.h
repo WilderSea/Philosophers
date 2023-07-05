@@ -6,11 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-<<<<<<< HEAD:philo_bonus/philo.h
 /*   Updated: 2023/07/05 16:39:40 by msintas-         ###   ########.fr       */
-=======
-/*   Updated: 2023/06/22 18:38:22 by msintas-         ###   ########.fr       */
->>>>>>> 3711f31e2b2056ca8cf9fa1d12426be2173040ad:philo_bonus/philo_bonus.h
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +16,11 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
-<<<<<<< HEAD:philo_bonus/philo.h
 # include <pthread.h>
 # include <semaphore.h>
 # include <fcntl.h>
 # include <sys/wait.h> // 'waitpid'
 # include <sys/types.h> // 'pid_t'
-=======
-# include <pthread.h> // quitar ?
-# include <semaphore.h>
-# include <fcntl.h>
-# include <sys/wait.h>
->>>>>>> 3711f31e2b2056ca8cf9fa1d12426be2173040ad:philo_bonus/philo_bonus.h
 # include <sys/time.h>
 # include <signal.h> // 'kill'
 
@@ -55,10 +44,7 @@ typedef struct s_philo
 	int					philo_ko;
 	int					meals;
 	int					finished;
-<<<<<<< HEAD:philo_bonus/philo.h
 	pthread_t			tid;
-=======
->>>>>>> 3711f31e2b2056ca8cf9fa1d12426be2173040ad:philo_bonus/philo_bonus.h
 	pid_t				pid;
 	long int			timestamp_in_ms;
 	struct timeval		start_time;
