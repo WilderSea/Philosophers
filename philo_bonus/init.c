@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/22 13:13:33 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/11 12:44:31 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,9 @@ int	ft_init_data(int argc, char **argus, t_data *data)
 }
 
 /*
-Initialize specific data for each thread.
-Assign each philosopher a number, starting from 1, and the two nearest forks,
-starting from 0. Connect the "philo struct" with the "data struct" to have access
-from each thread to the main program data and fill this pointer with struct data.
+Initialize specific data for each philosopher. Assign each philosopher a number, 
+starting from 1. Connect the "philo struct" with the "data struct" to have access
+from each process to the main program data and fill this pointer with struct data.
 */
 
 void	ft_init_philos(int argc, t_data *data)
@@ -57,8 +56,6 @@ void	ft_init_philos(int argc, t_data *data)
 	while (i < data->num_of_philos)
 	{
 		data->philosophers[i].philo_num = i + 1;
-		data->philosophers[i].fork_left = i;
-		data->philosophers[i].fork_right = (i + 1) % data->num_of_philos;
 		data->philosophers[i].generic_data = data;
 		data->philosophers[i].philo_ko = 0;
 		data->philosophers[i].meals = -1;
@@ -74,6 +71,7 @@ void	ft_init_philos(int argc, t_data *data)
 /* 
 Create all semaphores. Init their values to 1, so first process with sem_wait() 
 will decrease to 0 the semaphore value and all other processes may wait for a sem_post()
+Forks semaphore will init with the total number of forks available.
 */
 
 void	ft_init_semaphores(t_data *data)
@@ -81,29 +79,24 @@ void	ft_init_semaphores(t_data *data)
 	int	i;
 
 	i = 0;
-	while (i < data->num_of_philos)
+	while (i < data->num_of_philos) // bucle qitarlo
 	{
-		/*pthread_mutex_init(&data->mutexes[i], NULL);
-		pthread_mutex_init(&data->philosophers[i].current_time_mutex, NULL);
-		pthread_mutex_init(&data->philosophers[i].last_ate_mutex, NULL);
-		pthread_mutex_init(&data->philosophers[i].philo_ko_mutex, NULL);
-		pthread_mutex_init(&data->philosophers[i].meals_mutex, NULL);
-		pthread_mutex_init(&data->philosophers[i].finished_mutex, NULL);*/
-		sem_unlink("/forks_sem"); // este va a dar fallo ??
-		sem_unlink("/current_time_sem");
+		sem_unlink("/forks_sem");
+		/*sem_unlink("/current_time_sem");
 		sem_unlink("/last_ate_sem");
 		sem_unlink("/philo_ko_sem");
 		sem_unlink("/meals_sem");
-		sem_unlink("/finished_sem");
-		data->forks_sem = sem_open("/forks_sem", O_CREAT, 0666, 1);
-		data->philosophers[i].current_time_sem = sem_open("/current_time_sem", O_CREAT, 0666, 1);
-		data->philosophers[i].last_ate_sem = sem_open("/last_ate_sem", O_CREAT, 0666, 1);
-		data->philosophers[i].philo_ko_sem = sem_open("/philo_ko_sem", O_CREAT, 0666, 1);
-		data->philosophers[i].meals_sem = sem_open("/meals_sem", O_CREAT, 0666, 1);
-		data->philosophers[i].finished_sem = sem_open("/finished_sem", O_CREAT, 0666, 1);
+		sem_unlink("/finished_sem");*/
+		data->forks_sem = sem_open("/forks_sem", O_CREAT, 0644, data->num_of_forks);
+		/*
+		data->current_time_sem = sem_open("/current_time_sem", O_CREAT, 0644, 1);
+		data->last_ate_sem = sem_open("/last_ate_sem", O_CREAT, 0644, 1);
+		data->philo_ko_sem = sem_open("/philo_ko_sem", O_CREAT, 0644, 1);
+		data->meals_sem = sem_open("/meals_sem", O_CREAT, 0644, 1);
+		data->finished_sem = sem_open("/finished_sem", O_CREAT, 0644, 1);
+		*/
 		i++;
 	}
-	//pthread_mutex_init(&data->count_mutex, NULL);
 	sem_unlink("/count_sem");
 	data->count_sem = sem_open("/count_sem", O_CREAT, 0666, 1);
 }
@@ -117,27 +110,20 @@ void	ft_close_semaphores(t_data *data)
 	i = 0;
 	while (i < data->num_of_philos)
 	{
-		/*pthread_mutex_destroy(&data->mutexes[i]);
-		pthread_mutex_destroy(&data->philosophers[i].current_time_mutex);
-		pthread_mutex_destroy(&data->philosophers[i].last_ate_mutex);
-		pthread_mutex_destroy(&data->philosophers[i].philo_ko_mutex);
-		pthread_mutex_destroy(&data->philosophers[i].meals_mutex);
-		pthread_mutex_destroy(&data->philosophers[i].finished_mutex);*/
 		sem_close(data->forks_sem);
-		sem_close(data->philosophers[i].current_time_sem);
-		sem_close(data->philosophers[i].last_ate_sem);
-		sem_close(data->philosophers[i].philo_ko_sem);
-		sem_close(data->philosophers[i].meals_sem);
-		sem_close(data->philosophers[i].finished_sem);
+		/*sem_close(data->current_time_sem);
+		sem_close(data->last_ate_sem);
+		sem_close(data->philo_ko_sem);
+		sem_close(data->meals_sem);
+		sem_close(data->finished_sem);*/
 		sem_unlink("/forks_sem");
-		sem_unlink("/current_time_sem");
+		/*sem_unlink("/current_time_sem");
 		sem_unlink("/last_ate_sem");
 		sem_unlink("/philo_ko_sem");
 		sem_unlink("/meals_sem");
-		sem_unlink("/finished_sem");
+		sem_unlink("/finished_sem");*/
 		i++;
 	}
-	//pthread_mutex_destroy(&data->count_mutex);
 	sem_close(data->count_sem);
 	sem_unlink("/count_sem");
 }

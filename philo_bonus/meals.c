@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/22 13:37:21 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/11 13:43:57 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,9 @@
 
 void	ft_count_meals(t_philo *philo)
 {
-	//pthread_mutex_lock(&philo->meals_mutex);
-	sem_wait(philo->meals_sem);
+	//sem_wait(philo->meals_sem);
 	philo->meals++;
-	//pthread_mutex_unlock(&philo->meals_mutex);
-	sem_post(philo->meals_sem);
+	//sem_post(philo->meals_sem);
 }
 
 /*
@@ -40,25 +38,11 @@ int	ft_check_meals(t_data *data)
 	count = 0;
 	while (i < data->num_of_philos)
 	{
-		//pthread_mutex_lock(&data->philosophers[i].meals_mutex);
-		sem_wait(data->philosophers[i].meals_sem);
 		if (data->philosophers[i].meals >= data->num_must_eat)
 		{
-			//pthread_mutex_unlock(&data->philosophers[i].meals_mutex);
-			sem_post(data->philosophers[i].meals_sem);
-			//pthread_mutex_lock(&data->philosophers[i].finished_mutex);
-			sem_wait(data->philosophers[i].finished_sem);
 			data->philosophers[i].finished = 1;
-			//pthread_mutex_unlock(&data->philosophers[i].finished_mutex);
-			sem_post(data->philosophers[i].finished_sem);
-			//pthread_mutex_lock(&data->count_mutex);
-			sem_wait(data->count_sem);
 			count++;
-			//pthread_mutex_unlock(&data->count_mutex);
-			sem_post(data->count_sem);
 		}
-		//pthread_mutex_unlock(&data->philosophers[i].meals_mutex);
-		sem_post(data->philosophers[i].meals_sem); 
 		i++;
 	}
 	if (ft_everyphilo_ate(data, count) == 1)

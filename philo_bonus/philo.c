@@ -6,37 +6,48 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/05 17:11:26 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/11 13:30:50 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/*void *ft_supervisor(void *thread_info)
+void *ft_supervisor(void *thread_info)
 {
 	t_philo	*philo;
 	t_data	*data;
 
 	philo = (t_philo *) thread_info;
 	data = philo->generic_data;
-	
-}*/
+
+	while (1)
+	{
+		usleep(500);
+		if (ft_check_meals(data) == 1)
+			return (NULL);
+		if (ft_check_ko(data) == 1)
+			return (NULL);
+	}
+	return (NULL);
+}
 
 /* 
-    Every thread will execute this routine. Infinite loop will end only when
-    a philo is ko (actions return 1).
+    Every process will execute this routine in infinite loop.
+	One thread per each process will be created to act as supervisor to check 
+	if simulation should continue running.
+	Infinite loop will end only when a philo is ko (actions return 1).
 */
 
 void	*ft_action(void *each_philo)
 {
 	t_philo	*philo;
-	//int result;
+	int result;
 
 	philo = (t_philo *)each_philo;
-	// aqui debe ir el hilo supervisor
-	/*result = pthread_create(&philo->tid, NULL, &ft_supervisor, &philo);
+	// hilo supervisor
+	result = pthread_create(&philo->tid, NULL, &ft_supervisor, &philo);
 	if (result != 0)
-		exit (1);*/
+		exit (1);
 	while (1)
 	{
 		if (ft_philo_eats(philo) == 1)
@@ -49,13 +60,18 @@ void	*ft_action(void *each_philo)
 		}
 		ft_philo_thinks(philo);
 	}
+	pthread_join(philo->tid, NULL);
+	if (result != 0)
+	{
+		ft_putstr_fd("Failed to join the thread.\n", 2);
+		exit (1);
+	}
 	return (NULL);
 }
 
 /* 
-    Function to create threads, one per philosopher. This function as a main 
-    thread will continue executing an infinite loop that will check if philos 
-    are still alive or they still have to eat.
+    Function to fork the main process and create child processes, one per philosopher.
+	Only child processes execute the routine.
 */
 
 void	ft_create_philos(t_data *data)
@@ -80,7 +96,6 @@ void	ft_create_philos(t_data *data)
 			// CHILD PROCESS
 			//printf("Child process real id: %d\n", getpid());
 			//printf("Child process id: %d\n", data->philosophers[i].pid);
-			// enviar a hacer la rutina al child
 			ft_action(&data->philosophers[i]);
 		}
 		else
@@ -90,14 +105,14 @@ void	ft_create_philos(t_data *data)
 		}
 		i++;
 	}
-	while (1)
+	/*while (1)
 	{
 		usleep(500);
 		if (ft_check_meals(data) == 1)
 			return ;
 		if (ft_check_ko(data) == 1)
 			return ;
-	}
+	}*/
 	return ;
 }
 

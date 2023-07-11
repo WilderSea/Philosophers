@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:36:41 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/05 16:46:26 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/07 13:20:51 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_get_forks(t_philo *philo)
 {
-	sem_wait(&philo->generic_data->forks_sem[philo->fork_left]);
+	sem_wait(&philo->generic_data->forks_sem);
 	//pthread_mutex_lock(&(philo->generic_data->mutexes[philo->fork_left]));
 	if (ft_is_philo_ko(philo) == 1)
 	{

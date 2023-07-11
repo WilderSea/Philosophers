@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/05 16:39:40 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/11 13:43:45 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,38 +33,29 @@
 # define COLOR_RESET   "\x1b[0m"
 
 /*
- Struct to gather specific info about a philosopher
- */
+	Struct to gather specific info about a philosopher
+*/
 
 typedef struct s_philo
 {
 	int					philo_num;
-	int					fork_left;
-	int					fork_right;
+	pthread_t			tid;
+	
+	// 
 	int					philo_ko;
 	int					meals;
 	int					finished;
-	pthread_t			tid;
 	pid_t				pid;
 	long int			timestamp_in_ms;
 	struct timeval		start_time;
 	struct timeval		current_time;
 	struct timeval		last_ate;
-	// porque son punteros? podrian no serlo
-	sem_t				*current_time_sem; 
-	sem_t				*last_ate_sem;
-	sem_t				*philo_ko_sem;
-	sem_t				*meals_sem;
-	sem_t				*finished_sem;
-	/*sem_t				current_time_sem; 
-	sem_t				last_ate_sem;
-	sem_t				philo_ko_sem;
-	sem_t				meals_sem;
-	sem_t				finished_sem;*/
 	struct s_data		*generic_data;
 }	t_philo;
 
-/* Struct for generic info about the simulation */
+/* 
+	Struct for generic info about the simulation 
+*/
 
 typedef struct s_data
 {
@@ -76,8 +67,14 @@ typedef struct s_data
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
-	sem_t			*count_sem;
-	//sem_t			count_sem;
+	//sem_t			*count_sem;
+	// estas variables eran mutex antes y ahora no se si me hacen falta
+	sem_t				*current_time_sem; 
+	sem_t				*last_ate_sem;
+	sem_t				*philo_ko_sem;
+	sem_t				*meals_sem;
+	sem_t				*finished_sem;
+	//
 }	t_data;
 
 /* Main functions */
