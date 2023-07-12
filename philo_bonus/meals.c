@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/11 13:43:57 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/11 15:41:48 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@
 
 void	ft_count_meals(t_philo *philo)
 {
-	//sem_wait(philo->meals_sem);
 	philo->meals++;
-	//sem_post(philo->meals_sem);
 }
 
 /*
@@ -54,16 +52,10 @@ int	ft_check_meals(t_data *data)
 
 int	ft_everyphilo_ate(t_data *data, int total)
 {
-	//pthread_mutex_lock(&data->count_mutex);
-	sem_wait(data->count_sem);
 	if (total == data->num_of_philos)
 	{
-		//pthread_mutex_unlock(&data->count_mutex);
-		sem_post(data->count_sem);
 		return (1);
 	}
-	//pthread_mutex_unlock(&data->count_mutex);
-	sem_post(data->count_sem);
 	return (0);
 }
 
@@ -71,8 +63,8 @@ int	ft_everyphilo_ate(t_data *data, int total)
 
 void	ft_print_forks(t_philo *philo)
 {
-	printf("%ld philo %d has taking left fork %d\n", philo->timestamp_in_ms, \
-			philo->philo_num, philo->fork_left);
-	printf("%ld philo %d has taking right fork %d\n", philo->timestamp_in_ms, \
-			philo->philo_num, philo->fork_right);
+	printf("%ld philo %d has taking a fork.\n", philo->timestamp_in_ms, \
+			philo->philo_num);
+	printf("%ld philo %d has taking another fork\n", philo->timestamp_in_ms, \
+			philo->philo_num);
 }
