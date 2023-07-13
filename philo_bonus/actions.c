@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:36:41 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/11 15:44:25 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/13 14:25:15 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	ft_get_forks(t_philo *philo)
 	sem_wait(philo->generic_data->forks_sem); 
 	if (ft_is_philo_ko(philo) == 1)
 	{
+		printf("ha habido un ko getting forks\n");
 		return (1);
 	}
 	sem_wait(philo->generic_data->forks_sem);
@@ -24,6 +25,7 @@ int	ft_get_forks(t_philo *philo)
 	{
 		sem_post(philo->generic_data->forks_sem);
 		sem_post(philo->generic_data->forks_sem);
+		printf("ha habido un ko getting forks\n");
 		return (1);
 	}
 	return (0);
@@ -35,10 +37,12 @@ int	ft_leave_forks(t_philo *philo)
 	{
 		sem_post(philo->generic_data->forks_sem);
 		sem_post(philo->generic_data->forks_sem);
+		printf("ha habido un ko leaving forks\n");
 		return (1);
 	}
 	sem_post(philo->generic_data->forks_sem);
 	sem_post(philo->generic_data->forks_sem);
+	printf("ha habido un ko leaving forks\n");
 	return (0);
 }
 
@@ -62,6 +66,7 @@ int	ft_philo_sleeps(t_philo *philo)
 
 int	ft_philo_eats(t_philo *philo)
 {
+	printf("empieza rutina comida\n");
 	if (ft_get_forks(philo) == 1)
 		return (1);
 	ft_right_now(philo);
