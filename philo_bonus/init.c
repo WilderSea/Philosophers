@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/13 18:38:57 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/14 12:32:35 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,7 @@ void	ft_init_philos(int argc, t_data *data)
 	{
 		data->philosophers[i].philo_num = i + 1;
 		data->philosophers[i].generic_data = data;
-		gettimeofday(&data->philosophers[i].start_time, NULL);
-		printf("init start time philo %d \n", data->philosophers[i].philo_num);
-		printf("init start time philo %ld \n", data->philosophers[i].start_time.tv_sec);
+		gettimeofday(&data->philosophers[i].start_time, NULL);			
 		data->philosophers[i].last_ate = data->philosophers[i].start_time;	
 		data->philosophers[i].philo_ko = 0;
 		data->philosophers[i].meals = -1;
@@ -92,7 +90,9 @@ void	ft_init_semaphores(t_data *data)
 	}
 }
 
-/* Destroy mutexes */
+/* 
+	Destroy mutexes
+*/
 
 void	ft_close_semaphores(t_data *data)
 {
@@ -108,7 +108,7 @@ void	ft_close_semaphores(t_data *data)
 }
 
 /* 
-Free memory to avoid leaks 
+	Free memory to avoid leaks 
 */
 
 void	ft_free_resources(t_data *data)

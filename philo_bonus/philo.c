@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/13 20:17:54 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/14 13:03:36 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ void *ft_supervisor(void *thread_info)
 	{
 		usleep(500);
 		//printf("dentro del while y soy %lu\n", (unsigned long)supervised_philo->tid);
-		//if (ft_check_meals(data) == 1)
-			//return (NULL); // que no devuelva NULL, sino un numero para saber que ha ocurrido
+		if (ft_check_meals(supervised_philo) == 1)
+			return (NULL); 
+			// que no devuelva NULL, sino un numero para saber que ha ocurrido
 			// si hay un ko o si han comido. tiene que ser diferente si pasa una cosa u otra
 			// porque lo que hago despues es diferente, si es ko mato todo (en el principal)
 			// que sea exit (0)
@@ -69,14 +70,10 @@ void	*ft_action(void *each_philo)
 	{
 		if (ft_philo_eats(philo) == 1)
 		{
-			// no tiene sentido null. exit (1) puede ser exit (0)
-			// exit() terminate a process and return an "exit status" to its parent process. 
-			// to indicate that it has finished its execution
 			exit(1);
 		}
 		if (ft_philo_sleeps(philo) == 1)
 		{
-			// no tiene sentido null. exit (1)
 			exit(1);
 		}
 		ft_philo_thinks(philo);

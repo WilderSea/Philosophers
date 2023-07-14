@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/11 15:41:48 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/14 12:58:43 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,37 +22,28 @@ void	ft_count_meals(t_philo *philo)
 /*
     Function to check if all philosophers ate at least the required
     number of times, updating a counter. When this counter reaches the
-    same number of philos, will return 1 to the main thread to indicate
-    simulation can stop. Also, set every philo as "finished" so the 
-    eat function can return 1 in every thread and start the joining.
+    same number of philos, will return 1 to the supervisor thread to indicate
+    simulation can stop. Also, set philo as "finished" so the 
+    eat function can return 1 and the routine can exit.
 */
 
-int	ft_check_meals(t_data *data)
+int	ft_check_meals(t_philo *supervised_philo)
 {
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (i < data->num_of_philos)
+	if (supervised_philo->meals >= supervised_philo->generic_data->num_must_eat)
 	{
-		if (data->philosophers[i].meals >= data->num_must_eat)
-		{
-			data->philosophers[i].finished = 1;
-			count++;
-		}
-		i++;
+		supervised_philo->finished = 1;
+		supervised_philo->generic_data->how_many_philo_ate++;
 	}
-	if (ft_everyphilo_ate(data, count) == 1)
+	if (ft_everyphilo_ate(supervised_philo->generic_data) == 1)
 		return (1);
 	return (0);
 }
 
 /* Check when counter reaches the number of philos. */
 
-int	ft_everyphilo_ate(t_data *data, int total)
+int	ft_everyphilo_ate(t_data *data)
 {
-	if (total == data->num_of_philos)
+	if (data->how_many_philo_ate == data->num_of_philos)
 	{
 		return (1);
 	}

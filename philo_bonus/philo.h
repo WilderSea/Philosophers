@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/13 18:51:27 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/14 12:46:42 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef struct s_data
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
+	int				how_many_philo_ate;
 }	t_data;
 
 /* Main functions */
@@ -95,8 +96,8 @@ int	ft_check_ko(t_philo *supervised_philo);
 int			ft_is_philo_ko(t_philo *philo);
 void		ft_set_philos_as_ko(t_data *data);
 void		ft_count_meals(t_philo *philo);
-int			ft_check_meals(t_data *data);
-int			ft_everyphilo_ate(t_data *data, int total);
+int			ft_check_meals(t_philo *supervised_philo);
+int			ft_everyphilo_ate(t_data *data);
 void		ft_check_args(int argc, char **argus);
 void		ft_check_digits(unsigned int index, char *argu);
 

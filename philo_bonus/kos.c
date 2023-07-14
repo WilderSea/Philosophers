@@ -6,40 +6,31 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 12:36:13 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/13 18:51:08 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/14 12:16:02 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 /* 
-    Function to set every philo as ko. When one philosopher is ko,
-    all the others must be ko as well, 
-	
-	¿so the threads can be joined. ??
+    Function to set the supervised philo as ko.
+	Release forks before leaving when the number of philosophers is 2 or less.
 */
 
-void	ft_set_philos_as_ko(t_data *data)
+void	ft_set_supervised_philo_as_ko(t_philo *supervised_philo)
 {
-	int	i;
-
-	i = 0;
-	while (i < data->num_of_philos)
+	supervised_philo->philo_ko = 1;
+	if (supervised_philo->generic_data->num_of_philos <= 2)
 	{
-		data->philosophers[i].philo_ko = 1;
-		if (data->num_of_philos <= 2)
-		{
-			sem_post(data->forks_sem);
-		}
-		i++;
+		sem_post(supervised_philo->generic_data->forks_sem);
 	}
 }
 
 /*
-Function to check time left for each philosopher and decide if it is KO.
-It checks the values stored in each philo struct. If the difference between "now"
+Function to check time left for the supervised philosopher and decide if it is KO.
+It checks the values stored in the philo struct: if the difference between "now"
 and the moment the philo "eat last time" is greater than the "time to die", 
-print KO and set all the other philos as KO as well.
+print KO and set that philo as KO.
 */
 
 int	ft_check_ko(t_philo *supervised_philo)
@@ -51,14 +42,14 @@ int	ft_check_ko(t_philo *supervised_philo)
 			printf(COLOR_BLUE "%ld philo %d died" COLOR_RESET "\n", \
 					ft_capture_timestamp(supervised_philo->current_time, \
 						supervised_philo->start_time), supervised_philo->philo_num);
-			//ft_set_philos_as_ko(data);
+			ft_set_supervised_philo_as_ko(supervised_philo);
 			return (1);
 		}
 	return (0);
 }
 
 /* 
-    Function that checks if a philo has been set as ko.
+    Function that checks if a philo has been set as KO.
 */
 
 int	ft_is_philo_ko(t_philo *philo)
