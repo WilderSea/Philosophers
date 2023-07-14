@@ -6,11 +6,14 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/13 16:04:43 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/13 20:17:54 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+// distintos exit para diferenciar
+// exit sale del hijo. en este caso habria que matar los demas procesos
 
 void *ft_supervisor(void *thread_info)
 {
@@ -32,14 +35,15 @@ void *ft_supervisor(void *thread_info)
 			// si hay un ko o si han comido. tiene que ser diferente si pasa una cosa u otra
 			// porque lo que hago despues es diferente, si es ko mato todo (en el principal)
 			// que sea exit (0)
-		if (ft_check_ko(data) == 1)
-			// distintos exit para diferenciar
-			// exit sale del hijo. en este caso habria que matar los demas procesos
-			//printf("exit porque hay un ko\n");
+		if (ft_check_ko(supervised_philo) == 1)
+		{
 			printf("ha habido un ko: %d\n", supervised_philo->philo_num);
-			exit(1);
+			return (NULL); // si hace falta return null
+			// porque esto es un hilo paralelo a la rutina del hijo ft_action
+			// donde hago el JOIN de esto
+		}
 	}
-	return (NULL); // este no hace falta
+	return (NULL);
 }
 
 /* 
@@ -78,20 +82,20 @@ void	*ft_action(void *each_philo)
 		ft_philo_thinks(philo);
 	}
 	// a partir de aqui no llega , este join sacarlo al main
-	/*result = pthread_join(philo->tid, NULL); 
+	result = pthread_join(philo->tid, NULL);
+	printf("aqui no llega!!! no hace el join");
 	if (result != 0)
 	{
 		ft_putstr_fd("Failed to join the thread.\n", 2);
 		exit (1);
-	}*/
+	}
 	return (NULL);
 }
 
 /* 
     Function to fork the main process and create child processes, one per philosopher.
 	Only child processes execute the routine.
-	// importante. tengo que guardar el process id del proceso, aunque sea hijo, getpid no es 0
-// y ese id me sirve para luego hacer los kill, porque es el identificador real de ese proceso
+	Get the id of each process to identify it later when doing kill.
 */
 
 void	ft_create_philos(t_data *data)
@@ -101,8 +105,9 @@ void	ft_create_philos(t_data *data)
 	i = 0;
 	while (i < data->num_of_philos)
 	{
-		/*if (data->philosophers[i].philo_num % 2 != 0)
-			usleep(40);*/		
+		if (data->philosophers[i].philo_num % 2 != 0)
+			usleep(40);
+			
 		data->philosophers[i].pid = fork();
 		if (data->philosophers[i].pid < 0)
 		{
@@ -114,18 +119,14 @@ void	ft_create_philos(t_data *data)
 			// CHILD PROCESS
 			printf("Child process pid from the fork return: %d\n", data->philosophers[i].pid);
 			data->philosophers[i].real_pid = getpid();
-			printf("Child process real_id: %d\n", data->philosophers[i].real_pid);
+			printf("Child process real_id: %d -id =  %d\n", data->philosophers[i].real_pid, i);
 			
 			ft_action(&data->philosophers[i]);
 		}
 		else
 		{
 			// PARENT PROCESS
-			//int status;
 			printf("soy el parent process: %d\n", getpid());
-		
-			//waitpid(data->philosophers[i].real_pid, &status, 0);
-        	
 		}
 		i++;
 	}
@@ -161,7 +162,7 @@ void	ft_waitpid_processes(t_data *data)
 			i = 0;
 			while (i < data->num_of_philos)
 			{
-				kill(data->philosophers[i].real_pid, SIGTERM);
+				kill(data->philosophers[i].real_pid, SIGINT);
 				printf("ha habido un sigterm\n");
 				// break ..... con kill terminamos todos los procesos? o solo 1
 				i++;

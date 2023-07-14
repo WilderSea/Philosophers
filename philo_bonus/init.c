@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/13 16:04:15 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/13 18:38:57 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	ft_init_philos(int argc, t_data *data)
 	int	i;
 
 	i = 0;
+	
 	while (i < data->num_of_philos)
 	{
 		data->philosophers[i].philo_num = i + 1;
@@ -60,7 +61,7 @@ void	ft_init_philos(int argc, t_data *data)
 		gettimeofday(&data->philosophers[i].start_time, NULL);
 		printf("init start time philo %d \n", data->philosophers[i].philo_num);
 		printf("init start time philo %ld \n", data->philosophers[i].start_time.tv_sec);
-		data->philosophers[i].last_ate = data->philosophers[i].start_time;
+		data->philosophers[i].last_ate = data->philosophers[i].start_time;	
 		data->philosophers[i].philo_ko = 0;
 		data->philosophers[i].meals = -1;
 		if (argc == 6)

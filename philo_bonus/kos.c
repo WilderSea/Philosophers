@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 12:36:13 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/11 16:17:11 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/13 18:51:08 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,28 +42,18 @@ and the moment the philo "eat last time" is greater than the "time to die",
 print KO and set all the other philos as KO as well.
 */
 
-int	ft_check_ko(t_data *data)
+int	ft_check_ko(t_philo *supervised_philo)
 {
-	int	i;
-
-	i = 0;
-	while (i < data->num_of_philos)
-	{
-		gettimeofday(&data->philosophers[i].current_time, NULL);
-		if (ft_capture_timestamp(data->philosophers[i].current_time, \
-					data->philosophers[i].last_ate) >= data->time_to_die)
+		gettimeofday(&supervised_philo->current_time, NULL);
+		if (ft_capture_timestamp(supervised_philo->current_time, \
+					supervised_philo->last_ate) >= supervised_philo->generic_data->time_to_die)
 		{
 			printf(COLOR_BLUE "%ld philo %d died" COLOR_RESET "\n", \
-					ft_capture_timestamp(data->philosophers[i].current_time, \
-						data->philosophers[i].start_time), i + 1);
-			ft_set_philos_as_ko(data);
+					ft_capture_timestamp(supervised_philo->current_time, \
+						supervised_philo->start_time), supervised_philo->philo_num);
+			//ft_set_philos_as_ko(data);
 			return (1);
 		}
-		else
-		{
-			i++;
-		}
-	}
 	return (0);
 }
 
