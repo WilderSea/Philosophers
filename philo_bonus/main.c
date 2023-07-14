@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:22 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/22 13:32:51 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/14 13:33:32 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ void	check_leaks(void)
 }
 
 /* 
-Initializes program data and threads, waits for completion, and cleans up 
-resources. Returns 0 to indicate successful execution.
+Initializes program data and create processes, waits for completion, 
+and cleans up resources. Returns 0 to indicate successful execution.
 */
 
 int	main(int argc, char **argv)

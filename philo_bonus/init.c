@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/14 12:32:35 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/14 14:36:37 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,9 @@ void	ft_init_semaphores(t_data *data)
 	while (i < data->num_of_philos) // bucle qitarlo
 	{
 		sem_unlink("/forks_sem");
+		sem_unlink("/print_ko_sem");
 		data->forks_sem = sem_open("/forks_sem", O_CREAT, 0644, data->num_of_forks);
+		data->print_ko_sem = sem_open("/print_ko_sem", O_CREAT, 0644, 1);
 		i++;
 	}
 }
@@ -102,7 +104,9 @@ void	ft_close_semaphores(t_data *data)
 	while (i < data->num_of_philos)
 	{
 		sem_close(data->forks_sem);
+		sem_close(data->print_ko_sem);
 		sem_unlink("/forks_sem");
+		sem_unlink("/print_ko_sem");
 		i++;
 	}
 }

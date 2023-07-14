@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/14 12:46:42 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/14 15:12:08 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@
 typedef struct s_philo
 {
 	int					philo_num;
-	pthread_t			tid; // para el hilo supervisor
-	pid_t				pid; // fork() -> child id = 0
-	pid_t				real_pid; // real process ID --> getpid()
+	pthread_t			tid;
+	pid_t				pid;
+	pid_t				real_pid;
 	int					philo_ko;
 	int					meals;
 	int					finished;
@@ -63,6 +63,7 @@ typedef struct s_data
 	int				num_must_eat;
 	t_philo			*philosophers;
 	sem_t			*forks_sem;
+	sem_t			*print_ko_sem;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
@@ -92,7 +93,7 @@ void		ft_usleep_philo(t_philo *philo, long int waiting_time);
 
 /* Checkers */
 
-int	ft_check_ko(t_philo *supervised_philo);
+int			ft_check_ko(t_philo *supervised_philo);
 int			ft_is_philo_ko(t_philo *philo);
 void		ft_set_philos_as_ko(t_data *data);
 void		ft_count_meals(t_philo *philo);
