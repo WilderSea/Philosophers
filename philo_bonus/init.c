@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/14 14:36:37 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/14 18:44:27 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@ int	ft_init_data(int argc, char **argus, t_data *data)
 	data->num_of_forks = data->num_of_philos;
 	data->philosophers = malloc(sizeof(t_philo) * data->num_of_philos);
 	if (data->philosophers == NULL)
-		return (1);
-	data->forks_sem = malloc(sizeof(sem_t) * (data->num_of_philos));
-	if (data->forks_sem == NULL)
 		return (1);
 	data->time_to_die = ft_atoi(argus[1]);
 	data->time_to_eat = ft_atoi(argus[2]);
@@ -79,17 +76,10 @@ Forks semaphore will init with the total number of forks available.
 
 void	ft_init_semaphores(t_data *data)
 {
-	int	i;
-
-	i = 0;
-	while (i < data->num_of_philos) // bucle qitarlo
-	{
 		sem_unlink("/forks_sem");
 		sem_unlink("/print_ko_sem");
 		data->forks_sem = sem_open("/forks_sem", O_CREAT, 0644, data->num_of_forks);
 		data->print_ko_sem = sem_open("/print_ko_sem", O_CREAT, 0644, 1);
-		i++;
-	}
 }
 
 /* 
@@ -98,19 +88,11 @@ void	ft_init_semaphores(t_data *data)
 
 void	ft_close_semaphores(t_data *data)
 {
-	int	i;
-
-	i = 0;
-	while (i < data->num_of_philos)
-	{
 		sem_close(data->forks_sem);
 		sem_close(data->print_ko_sem);
 		sem_unlink("/forks_sem");
 		sem_unlink("/print_ko_sem");
-		i++;
-	}
 }
-
 /* 
 	Free memory to avoid leaks 
 */
@@ -118,5 +100,4 @@ void	ft_close_semaphores(t_data *data)
 void	ft_free_resources(t_data *data)
 {
 	free(data->philosophers);
-	free(data->forks_sem);
 }

@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/14 17:39:01 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/14 18:41:11 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,12 @@ void *ft_supervisor(void *thread_info)
 		usleep(500);
 		if (ft_check_meals(supervised_philo) == 1)
 		{
+			printf("meals: tid del hilo: %lu\n", (unsigned long)supervised_philo->tid);
 			return (NULL);
 		}
 		if (ft_check_ko(supervised_philo) == 1)
 		{
-			printf("tid del hilo: %lu\n", (unsigned long)supervised_philo->tid);
+			printf("ko: tid del hilo: %lu\n", (unsigned long)supervised_philo->tid);
 			return (NULL);
 		}
 	}
@@ -56,12 +57,13 @@ void	*ft_action(void *each_philo)
 		if (ft_philo_eats(philo) == 1)
 		{
 			pthread_join(philo->tid, NULL);
-			printf("after join tid del hilo: %lu\n", (unsigned long)philo->tid);
+			printf("eat: after join tid del hilo: %lu\n", (unsigned long)philo->tid);
 			exit(1);
 		}
 		if (ft_philo_sleeps(philo) == 1)
 		{
 			pthread_join(philo->tid, NULL);
+			printf("sleeps: after join tid del hilo: %lu\n", (unsigned long)philo->tid);
 			exit(1);
 		}
 		ft_philo_thinks(philo);
@@ -113,22 +115,25 @@ void	ft_waitpid_processes(t_data *data)
 	int	status;
 	int terminated_child;
 
-	i = 0;
-	while (i < data->num_of_philos)
-	{
-		
-		terminated_child = waitpid(-1, &status, 0);
-		if (status != 0)
+
+	terminated_child = waitpid(-1, &status, 0);
+	printf("terminated_child: %d\n", terminated_child);
+	// if (WIFEXITED(status))
+	// {
+		i = 0;
+			printf("killinf %d\n", data->num_of_philos);
+
+		while (i < data->num_of_philos)
 		{
-			i = 0;
-			while (i < data->num_of_philos)
+			// printf("kill\n");
+			// printf("killinf %d\n", data->num_of_philos);
+
+			//kill(data->philosophers[i].real_pid, SIGINT);
+			if(terminated_child != data->philosophers[i].pid)
 			{
-				kill(data->philosophers[i].real_pid, SIGINT);
-				//printf("kill\n");
-				//break;
-				i++;
+				kill(data->philosophers[i].pid, SIGINT);
 			}
+			i++;
 		}
-		i++;
-	}
+	// }
 }

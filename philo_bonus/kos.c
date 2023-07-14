@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 12:36:13 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/14 17:35:13 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/14 18:30:16 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@
 
 void	ft_set_supervised_philo_as_ko(t_philo *supervised_philo)
 {
+	//sem_wait(supervised_philo->generic_data->print_ko_sem);
 	supervised_philo->philo_ko = 1;
+	//sem_post(supervised_philo->generic_data->print_ko_sem);
 	if (supervised_philo->generic_data->num_of_philos <= 2)
 	{
 		sem_post(supervised_philo->generic_data->forks_sem);
@@ -44,9 +46,9 @@ int	ft_check_ko(t_philo *supervised_philo)
 					ft_capture_timestamp(supervised_philo->current_time, \
 						supervised_philo->start_time), supervised_philo->philo_num);
 			
-			ft_set_supervised_philo_as_ko(supervised_philo);
 			//sem_post(supervised_philo->generic_data->print_ko_sem);
-			return (1);
+			ft_set_supervised_philo_as_ko(supervised_philo);
+			exit(1);
 		}
 	return (0);
 }
@@ -57,9 +59,12 @@ int	ft_check_ko(t_philo *supervised_philo)
 
 int	ft_is_philo_ko(t_philo *philo)
 {
+	//sem_wait(philo->generic_data->print_ko_sem);
 	if (philo->philo_ko == 1)
 	{
+		//sem_post(philo->generic_data->print_ko_sem);
 		return (1);
 	}
+	//sem_post(philo->generic_data->print_ko_sem);
 	return (0);
 }
