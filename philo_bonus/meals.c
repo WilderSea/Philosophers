@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/14 12:58:43 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/14 18:54:46 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,10 @@ int	ft_everyphilo_ate(t_data *data)
 
 void	ft_print_forks(t_philo *philo)
 {
+	sem_wait(philo->generic_data->print_sem);
 	printf("%ld philo %d has taking a fork.\n", philo->timestamp_in_ms, \
 			philo->philo_num);
 	printf("%ld philo %d has taking another fork\n", philo->timestamp_in_ms, \
 			philo->philo_num);
+	sem_post(philo->generic_data->print_sem);
 }

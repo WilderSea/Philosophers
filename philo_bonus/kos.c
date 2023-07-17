@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 12:36:13 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/14 18:30:16 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/14 18:55:46 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,12 @@ int	ft_check_ko(t_philo *supervised_philo)
 		if (ft_capture_timestamp(supervised_philo->current_time, \
 					supervised_philo->last_ate) >= supervised_philo->generic_data->time_to_die)
 		{
-			//sem_wait(supervised_philo->generic_data->print_ko_sem);
+			sem_wait(supervised_philo->generic_data->print_sem);
 			printf(COLOR_BLUE "%ld philo %d died" COLOR_RESET "\n", \
 					ft_capture_timestamp(supervised_philo->current_time, \
 						supervised_philo->start_time), supervised_philo->philo_num);
-			
-			//sem_post(supervised_philo->generic_data->print_ko_sem);
 			ft_set_supervised_philo_as_ko(supervised_philo);
+			sem_post(supervised_philo->generic_data->print_sem);
 			exit(1);
 		}
 	return (0);

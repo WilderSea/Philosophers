@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/14 18:44:27 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/14 18:48:37 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ Forks semaphore will init with the total number of forks available.
 void	ft_init_semaphores(t_data *data)
 {
 		sem_unlink("/forks_sem");
-		sem_unlink("/print_ko_sem");
+		sem_unlink("/print_sem");
 		data->forks_sem = sem_open("/forks_sem", O_CREAT, 0644, data->num_of_forks);
-		data->print_ko_sem = sem_open("/print_ko_sem", O_CREAT, 0644, 1);
+		data->print_sem = sem_open("/print_sem", O_CREAT, 0644, 1);
 }
 
 /* 
@@ -89,9 +89,9 @@ void	ft_init_semaphores(t_data *data)
 void	ft_close_semaphores(t_data *data)
 {
 		sem_close(data->forks_sem);
-		sem_close(data->print_ko_sem);
+		sem_close(data->print_sem);
 		sem_unlink("/forks_sem");
-		sem_unlink("/print_ko_sem");
+		sem_unlink("/print_sem");
 }
 /* 
 	Free memory to avoid leaks 
