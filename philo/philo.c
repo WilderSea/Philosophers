@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/22 13:44:47 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/17 12:15:51 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	*ft_action(void *each_philo)
 	t_philo	*philo;
 
 	philo = (t_philo *)each_philo;
+	if (philo->philo_num % 2 == 1)
+		usleep(250);
 	while (1)
 	{
 		if (ft_philo_eats(philo) == 1)
@@ -50,9 +52,7 @@ void	ft_create_philos(t_data *data)
 
 	i = 0;
 	while (i < data->num_of_philos)
-	{
-		if (data->philosophers[i].philo_num % 2 != 0)
-			usleep(40);
+	{		
 		gettimeofday(&data->philosophers[i].start_time, NULL);
 		data->philosophers[i].last_ate = data->philosophers[i].start_time;
 		result = pthread_create(&data->philosophers[i].tid, NULL, &ft_action, \

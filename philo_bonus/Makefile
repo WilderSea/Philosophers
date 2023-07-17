@@ -6,11 +6,11 @@
 #    By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/14 17:02:35 by msintas-          #+#    #+#              #
-#    Updated: 2023/07/17 10:29:18 by msintas-         ###   ########.fr        #
+#    Updated: 2023/07/17 12:24:36 by msintas-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	=	philo
+NAME	=	philo_bonus
 
 SRCS	=	main.c \
 			init.c \
@@ -36,10 +36,10 @@ $(NAME):	$(OBJS)
 			$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
-			$(RM) $(OBJS) $(BOBJS)
+			$(RM) $(OBJS)
 
 fclean:		
-			$(RM) $(OBJS) $(BOBJS) $(NAME)
+			$(RM) $(OBJS) $(NAME)
 
 re:			fclean all
 

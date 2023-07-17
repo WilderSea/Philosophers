@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:22 by msintas-          #+#    #+#             */
-/*   Updated: 2023/06/22 13:32:51 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/17 12:14:40 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,10 @@ void	ft_check_args(int argc, char **argus)
 
 /* Check system leaks: atexit(check_leaks) */
 
-void	check_leaks(void)
+/*void	check_leaks(void)
 {
 	system("leaks -q philo");
-}
+}*/
 
 /* 
 Initializes program data and threads, waits for completion, and cleans up 

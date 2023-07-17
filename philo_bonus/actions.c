@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 11:36:41 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/17 10:31:09 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/17 10:58:13 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_get_forks(t_philo *philo)
 {
-	sem_wait(philo->generic_data->forks_sem); 
+	sem_wait(philo->generic_data->forks_sem);
 	if (ft_is_philo_ko(philo) == 1)
 	{
 		return (1);
@@ -82,13 +82,8 @@ int	ft_philo_eats(t_philo *philo)
 		ft_count_meals(philo);
 	if (ft_leave_forks(philo) == 1)
 		return (1);
-	//sem_wait(philo->generic_data->check_sem);
 	if (philo->finished == 1)
-	{
-		//sem_post(philo->generic_data->check_sem);
 		return (1);
-	}
-	//sem_post(philo->generic_data->check_sem);
 	if (ft_is_philo_ko(philo) == 1)
 		return (1);
 	return (0);

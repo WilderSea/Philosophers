@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/17 10:32:57 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/17 10:53:06 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@
 # include <pthread.h>
 # include <semaphore.h>
 # include <fcntl.h>
-# include <sys/wait.h> // 'waitpid'
-# include <sys/types.h> // 'pid_t'
+# include <sys/wait.h>
+# include <sys/types.h>
 # include <sys/time.h>
-# include <signal.h> // 'kill'
+# include <signal.h>
 
 # define COLOR_RED     "\x1b[31m"
 # define COLOR_GREEN   "\x1b[32m"
@@ -64,7 +64,6 @@ typedef struct s_data
 	t_philo			*philosophers;
 	sem_t			*forks_sem;
 	sem_t			*print_sem;
-	//sem_t			*check_sem;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
@@ -108,7 +107,7 @@ void		ft_check_digits(unsigned int index, char *argu);
 void		ft_print_forks(t_philo *philo);
 void		ft_print_usage(void);
 void		ft_free_resources(t_data *data);
-void		check_leaks(void);
+//void		check_leaks(void);
 
 /* Utils */
 

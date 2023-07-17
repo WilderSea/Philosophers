@@ -6,13 +6,13 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/17 10:23:40 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/17 12:20:32 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void *ft_supervisor(void *thread_info)
+void	*ft_supervisor(void *thread_info)
 {
 	t_philo	*supervised_philo;
 	t_data	*data;
@@ -44,7 +44,7 @@ void *ft_supervisor(void *thread_info)
 void	*ft_action(void *each_philo)
 {
 	t_philo	*philo;
-	int result;
+	int		result;
 
 	philo = (t_philo *)each_philo;
 	result = pthread_create(&philo->tid, NULL, &ft_supervisor, philo);
@@ -68,9 +68,9 @@ void	*ft_action(void *each_philo)
 }
 
 /* 
-    Function to fork the main process and create child processes, one per philosopher.
-	Only child processes execute the routine.
-	Get the id of each process to identify it later when doing kill.
+ Function to fork the main process and create child processes, 
+ one per philosopher. Only child processes execute the routine.
+ Get the id of each process to identify it later when doing kill.
 */
 
 void	ft_create_philos(t_data *data)
@@ -90,7 +90,7 @@ void	ft_create_philos(t_data *data)
 		}
 		else if (data->philosophers[i].pid == 0)
 		{
-			data->philosophers[i].real_pid = getpid();	
+			data->philosophers[i].real_pid = getpid();
 			ft_action(&data->philosophers[i]);
 		}
 		i++;
@@ -99,23 +99,23 @@ void	ft_create_philos(t_data *data)
 }
 
 /* 
-	Function to wait for the termination of any child process (-1) in a parent process.
-	Waitpid--> -1 indicates parent waits for ANY child process to terminate)
-	status: when value is 0 indicates child process terminated succesfully.
-
+	Function to wait for the termination of any child process (-1) 
+	in a parent process. Waitpid--> -1 indicates parent waits for
+   	ANY child process to terminate. Check which child terminated 
+	and kill all the other children to finish program.
 */
 
 void	ft_waitpid_processes(t_data *data)
 {
 	int	i;
 	int	status;
-	int terminated_child;
-	
+	int	terminated_child;
+
 	i = 0;
 	terminated_child = waitpid(-1, &status, 0);
 	while (i < data->num_of_philos)
 	{
-		if(terminated_child != data->philosophers[i].pid)
+		if (terminated_child != data->philosophers[i].pid)
 		{
 			kill(data->philosophers[i].pid, SIGINT);
 		}

@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 13:12:28 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/17 10:33:21 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/17 11:01:31 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,10 @@ int	ft_init_data(int argc, char **argus, t_data *data)
 }
 
 /*
-Initialize specific data for each philosopher. Assign each philosopher a number, 
-starting from 1. Connect the "philo struct" with the "data struct" to have access
-from each process to the main program data and fill this pointer with struct data.
+ Initialize specific data for each philosopher. Assign each philosopher a 
+ number, starting from 1. Connect the "philo struct" with the "data struct"
+ to have access from each process to the main program data and fill this
+ pointer with struct data.
 */
 
 void	ft_init_philos(int argc, t_data *data)
@@ -50,13 +51,12 @@ void	ft_init_philos(int argc, t_data *data)
 	int	i;
 
 	i = 0;
-	
 	while (i < data->num_of_philos)
 	{
 		data->philosophers[i].philo_num = i + 1;
 		data->philosophers[i].generic_data = data;
-		gettimeofday(&data->philosophers[i].start_time, NULL);			
-		data->philosophers[i].last_ate = data->philosophers[i].start_time;	
+		gettimeofday(&data->philosophers[i].start_time, NULL);
+		data->philosophers[i].last_ate = data->philosophers[i].start_time;
 		data->philosophers[i].philo_ko = 0;
 		data->philosophers[i].meals = -1;
 		if (argc == 6)
@@ -75,27 +75,24 @@ Forks semaphore will init with the total number of forks available.
 
 void	ft_init_semaphores(t_data *data)
 {
-		sem_unlink("/forks_sem");
-		sem_unlink("/print_sem");
-		//sem_unlink("/check_sem");
-		data->forks_sem = sem_open("/forks_sem", O_CREAT, 0644, data->num_of_forks);
-		data->print_sem = sem_open("/print_sem", O_CREAT, 0644, 1);
-		//data->print_sem = sem_open("/check_sem", O_CREAT, 0644, 1);
+	sem_unlink("/forks_sem");
+	sem_unlink("/print_sem");
+	data->forks_sem = sem_open("/forks_sem", O_CREAT, 0644, data->num_of_forks);
+	data->print_sem = sem_open("/print_sem", O_CREAT, 0644, 1);
 }
 
 /* 
-	Release semaphores
+	Release semaphores.
 */
 
 void	ft_close_semaphores(t_data *data)
 {
-		sem_close(data->forks_sem);
-		sem_close(data->print_sem);
-		//sem_close(data->check_sem);
-		sem_unlink("/forks_sem");
-		sem_unlink("/print_sem");
-		//sem_unlink("/check_sem");
+	sem_close(data->forks_sem);
+	sem_close(data->print_sem);
+	sem_unlink("/forks_sem");
+	sem_unlink("/print_sem");
 }
+
 /* 
 	Free memory to avoid leaks 
 */
