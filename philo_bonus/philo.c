@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:55:36 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/14 18:55:20 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/17 10:23:40 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	ft_create_philos(t_data *data)
 		}
 		else if (data->philosophers[i].pid == 0)
 		{
-			data->philosophers[i].real_pid = getpid();			
+			data->philosophers[i].real_pid = getpid();	
 			ft_action(&data->philosophers[i]);
 		}
 		i++;

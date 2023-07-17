@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 12:36:13 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/14 18:55:46 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/17 10:32:38 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@
 
 void	ft_set_supervised_philo_as_ko(t_philo *supervised_philo)
 {
-	//sem_wait(supervised_philo->generic_data->print_ko_sem);
+	//sem_wait(supervised_philo->generic_data->check_sem);
 	supervised_philo->philo_ko = 1;
-	//sem_post(supervised_philo->generic_data->print_ko_sem);
+	//sem_post(supervised_philo->generic_data->check_sem);
 	if (supervised_philo->generic_data->num_of_philos <= 2)
 	{
+		//sem_post(supervised_philo->generic_data->check_sem);
 		sem_post(supervised_philo->generic_data->forks_sem);
 	}
 }
@@ -37,10 +38,12 @@ print KO and set that philo as KO.
 
 int	ft_check_ko(t_philo *supervised_philo)
 {
+		//sem_wait(supervised_philo->generic_data->check_sem);
 		gettimeofday(&supervised_philo->current_time, NULL);
 		if (ft_capture_timestamp(supervised_philo->current_time, \
 					supervised_philo->last_ate) >= supervised_philo->generic_data->time_to_die)
 		{
+			//sem_post(supervised_philo->generic_data->check_sem);
 			sem_wait(supervised_philo->generic_data->print_sem);
 			printf(COLOR_BLUE "%ld philo %d died" COLOR_RESET "\n", \
 					ft_capture_timestamp(supervised_philo->current_time, \
@@ -58,12 +61,12 @@ int	ft_check_ko(t_philo *supervised_philo)
 
 int	ft_is_philo_ko(t_philo *philo)
 {
-	//sem_wait(philo->generic_data->print_ko_sem);
+	//sem_wait(philo->generic_data->check_sem);
 	if (philo->philo_ko == 1)
 	{
-		//sem_post(philo->generic_data->print_ko_sem);
+		//sem_post(philo->generic_data->check_sem);
 		return (1);
 	}
-	//sem_post(philo->generic_data->print_ko_sem);
+	//sem_post(philo->generic_data->check_sem);
 	return (0);
 }

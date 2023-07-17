@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 17:02:16 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/14 18:46:25 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/17 10:32:57 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct s_data
 	t_philo			*philosophers;
 	sem_t			*forks_sem;
 	sem_t			*print_sem;
+	//sem_t			*check_sem;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;

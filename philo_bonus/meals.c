@@ -6,7 +6,7 @@
 /*   By: msintas- <msintas-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 16:17:56 by msintas-          #+#    #+#             */
-/*   Updated: 2023/07/14 18:54:46 by msintas-         ###   ########.fr       */
+/*   Updated: 2023/07/17 10:29:59 by msintas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,14 @@ void	ft_count_meals(t_philo *philo)
 
 int	ft_check_meals(t_philo *supervised_philo)
 {
+	//sem_wait(supervised_philo->generic_data->check_sem);
 	if (supervised_philo->meals >= supervised_philo->generic_data->num_must_eat)
 	{
 		supervised_philo->finished = 1;
 		supervised_philo->generic_data->how_many_philo_ate++;
+		//sem_post(supervised_philo->generic_data->check_sem);
 	}
+	//sem_post(supervised_philo->generic_data->check_sem);
 	if (ft_everyphilo_ate(supervised_philo->generic_data) == 1)
 		return (1);
 	return (0);
